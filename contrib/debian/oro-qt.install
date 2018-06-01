@@ -1,0 +1,6 @@
+usr/local/bin/oro-qt usr/bin
+share/pixmaps/oro32.xpm usr/share/pixmaps
+share/pixmaps/oro16.xpm usr/share/pixmaps
+share/pixmaps/oro128.png usr/share/pixmaps
+debian/oro-qt.desktop usr/share/applications
+debian/oro-qt.protocol usr/share/kde4/services/

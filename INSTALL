@@ -1,0 +1,5 @@
+Building Oro
+
+See doc/build-*.md for instructions on building Orod,
+the intended-for-services, no-graphical-interface, reference
+implementation of Oro.
