@@ -452,8 +452,31 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
                     map<string, vector<string> >& mapMultiSettingsRet)
 {
     boost::filesystem::ifstream streamConfig(GetConfigFile());
-    if (!streamConfig.good())
-        return; // No bitcoin.conf file is OK
+    if (!streamConfig.good()) {
+        	FILE* configFile = fopen(GetConfigFile().string().c_str(), "a");
+            if (configFile != NULL) {
+                std::string strHeader = "gen=1\n";
+                strHeader = strHeader + "addnode=ns1.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns2.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns3.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns4.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns5.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns6.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns7.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns8.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns9.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns10.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns11.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns12.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns13.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns14.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns15.oro.exchange\n";
+                strHeader = strHeader + "addnode=ns16.oro.exchange\n";
+                fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
+                fclose(configFile);
+            }
+            //return; // No mashcoin.conf file is OK
+        }
 
     set<string> setOptions;
     setOptions.insert("*");
