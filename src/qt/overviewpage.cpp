@@ -202,7 +202,7 @@ void OverviewPage::setOROInfo(const CAmount& blockReward, const CAmount& coinPri
     currentTotalCoins = totalCoins;
     currentMarketCap = marketCap;
 
-    ui->labelBlockReward->setText(BitcoinUnits::formatWithUnit(unit, blockReward, false, BitcoinUnits::separatorComma, true, true));
+    ui->labelBlockReward->setText(BitcoinUnits::formatWithUnit(unit, 1, false, BitcoinUnits::separatorComma, true, false));
     ui->labelCoinPrice->setText(USDUnits::formatWithUnit(unit, coinPrice, false, USDUnits::separatorComma));
     ui->labelTotalCoins->setText(BitcoinUnits::formatWithUnit(unit, totalCoins, false, BitcoinUnits::separatorComma, true, true));
     ui->labelMarketCap->setText(USDUnits::formatWithUnit(unit, marketCap, false, USDUnits::separatorComma, true, true));
