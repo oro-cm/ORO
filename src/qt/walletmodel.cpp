@@ -111,6 +111,11 @@ CAmount WalletModel::getCoinPrice() const
     return wallet->GetCoinPrice();
 }
 
+CAmount WalletModel::getIssuedCoins() const
+{
+    return wallet->GetIssuedCoins();
+}
+
 CAmount WalletModel::getTargetPrice() const
 {
     return wallet->GetTargetPrice();

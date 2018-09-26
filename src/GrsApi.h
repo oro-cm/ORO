@@ -19,13 +19,18 @@ public:
 
     // Price at the specified time
     CAmount GetPrice(unsigned int time);
+    // Issued coins at the specified time
+    CAmount GetIssuedCoins(unsigned int time);
     // Last known price broadcasted by GRS
     CAmount GetLatestPrice();
 
 private:
 
   CAmount GetGrsApiPrice(unsigned int time = 0);
+  CAmount GetGrsApiIssuedCoins(unsigned int time = 0);
   CAmount DoApiPriceRequest(const std::string& reqName,
+                            const std::string& args);
+  CAmount DoApiIssuedCoinsRequest(const std::string& reqName,
                             const std::string& args);
   int DoApiRequest(const std::string& url, std::ostringstream& oss);
 
@@ -52,12 +57,14 @@ public:
     // Blockchain tip information
     CAmount GetBlockReward() const;
     CAmount GetPrice();
+    CAmount GetIssuedCoins();
     CAmount GetTargetPrice() const;
     CAmount GetTotalCoins() const;
     CAmount GetMarketCap();
 
 protected:
     CAmount GetPrice(unsigned int time);
+    CAmount GetIssuedCoins(unsigned int time);
     CAmount GetTargetPrice(unsigned int time) const;
     
 protected:

@@ -137,6 +137,7 @@ public:
     
     CAmount getBlockReward() const;
     CAmount getCoinPrice() const;
+    CAmount getIssuedCoins() const;
     CAmount getTargetPrice() const;
     CAmount getTotalCoins() const;
     CAmount getMarketCap() const;

@@ -1159,6 +1159,11 @@ CAmount CWallet::GetCoinPrice() const
     return pOroSystem->GetPrice();
 }
 
+CAmount CWallet::GetIssuedCoins() const
+{
+    return pOroSystem->GetIssuedCoins();
+}
+
 CAmount CWallet::GetTargetPrice() const
 {
     return pOroSystem->GetTargetPrice();

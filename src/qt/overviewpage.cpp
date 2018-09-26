@@ -192,7 +192,7 @@ void OverviewPage::updateWatchOnlyLabels(bool showWatchOnly)
 
 void OverviewPage::setOROInfo(const CAmount& blockReward, const CAmount& coinPrice,
                               const CAmount& targetPrice, const CAmount& totalCoins,
-                              const CAmount& marketCap)
+                              const CAmount& issuedCoins, const CAmount& marketCap)
 {
     int unit = walletModel->getOptionsModel()->getDisplayUnit();
 
@@ -200,11 +200,13 @@ void OverviewPage::setOROInfo(const CAmount& blockReward, const CAmount& coinPri
     currentCoinPrice = coinPrice;
     currentTargetPrice = targetPrice;
     currentTotalCoins = totalCoins;
+    currentIssuedCoins = issuedCoins;
     currentMarketCap = marketCap;
 
     ui->labelBlockReward->setText(BitcoinUnits::formatWithUnit(unit, 1, false, BitcoinUnits::separatorComma, true, false));
     ui->labelCoinPrice->setText(USDUnits::formatWithUnit(unit, coinPrice, false, USDUnits::separatorComma));
     ui->labelTotalCoins->setText(BitcoinUnits::formatWithUnit(unit, totalCoins, false, BitcoinUnits::separatorComma, true, true));
+    ui->labelIssuedCoins->setText(BitcoinUnits::formatWithUnit(unit, issuedCoins, false, BitcoinUnits::separatorComma, true, true));
     ui->labelMarketCap->setText(USDUnits::formatWithUnit(unit, marketCap, false, USDUnits::separatorComma, true, true));
 }
 
@@ -256,8 +258,8 @@ void OverviewPage::setWalletModel(WalletModel *model)
         connect(model, SIGNAL(notifyWatchonlyChanged(bool)), this, SLOT(updateWatchOnlyLabels(bool)));
         
         setOROInfo(model->getBlockReward(), model->getCoinPrice(), model->getTargetPrice(),
-                   model->getTotalCoins(), model->getMarketCap());
-        connect(model, SIGNAL(oroInfoChanged(CAmount, CAmount, CAmount, CAmount, CAmount)), this, SLOT(setOROInfo(CAmount, CAmount, CAmount, CAmount, CAmount)));
+                   model->getTotalCoins(), model->getIssuedCoins(), model->getMarketCap());
+        connect(model, SIGNAL(oroInfoChanged(CAmount, CAmount, CAmount, CAmount, CAmount)), this, SLOT(setOROInfo(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
     }
 
     // update the display unit, to not use the default ("ORO")

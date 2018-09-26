@@ -41,7 +41,7 @@ public slots:
     
     void setOROInfo(const CAmount& blockReward, const CAmount& coinPrice,
                     const CAmount& targetPrice, const CAmount& totalCoins,
-                    const CAmount& marketCap);
+                    const CAmount& issuedCoins, const CAmount& marketCap);
 
     /** Set number of blocks shown in the UI */
     void setNumBlocks(int count);
@@ -64,6 +64,7 @@ private:
     CAmount currentCoinPrice;
     CAmount currentTargetPrice;
     CAmount currentTotalCoins;
+    CAmount currentIssuedCoins;
     CAmount currentMarketCap;
 
     TxViewDelegate *txdelegate;

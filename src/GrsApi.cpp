@@ -65,6 +65,27 @@ CAmount CGrsApi::GetPrice(unsigned int time)
     }
 }
 
+CAmount CGrsApi::GetIssuedCoins(unsigned int time)
+{
+    LogPrintf("CGrsApi::GetIssuedCoins: time = %d\n", time);
+
+    // get price from the live feed
+    while (true) {  //TODO(oro): !!!
+        try {
+            boost::this_thread::interruption_point();
+            unsigned int timestamp = 0; //TODO(oro): must be 'time'
+            CAmount issuedCoins = GetGrsApiIssuedCoins(timestamp);
+            LogPrintf("GRS issued coins for timestamp: time = %d, issued coins = %d\n", time, issuedCoins);
+            return issuedCoins;
+        } catch (const std::runtime_error& e) {
+            error("Can't get GRS issued coins for timestamp: %s\n", e.what());
+        } catch (const boost::thread_interrupted& e) {
+            LogPrintf("CGrsApi::GetIssuedCoins thread terminated\n");
+            throw;
+        }
+    }
+}
+
 CAmount CGrsApi::GetLatestPrice()
 {
     return 10 * USCENT1;   // STUB: 0.1USD, TODO(oro): get actual coin price
@@ -78,6 +99,16 @@ CAmount CGrsApi::GetGrsApiPrice(unsigned int timestamp)
         reqArgs << timestamp;
     }
     return DoApiPriceRequest("price", reqArgs.str());
+}
+
+CAmount CGrsApi::GetGrsApiIssuedCoins(unsigned int timestamp)
+{
+    LogPrintf("Getting GRS issued coins for timestamp: time = %d\n", timestamp);
+    std::ostringstream reqArgs;
+    if (timestamp != 0) {
+        reqArgs << timestamp;
+    }
+    return DoApiIssuedCoinsRequest("circulation", reqArgs.str());
 }
 
 CAmount CGrsApi::DoApiPriceRequest(const std::string& reqName,
@@ -94,7 +125,7 @@ CAmount CGrsApi::DoApiPriceRequest(const std::string& reqName,
     std::ostringstream rawResponse;
     try {
         apiResponseCode = DoApiRequest(apiUrl.str(), rawResponse);
-        std::clog << "GRS API response: " << rawResponse.str() << std::endl;
+        // std::clog << "GRS API response: " << rawResponse.str() << std::endl;
     } catch (const curlpp::RuntimeError& e) {
         throw std::runtime_error(std::string(e.what())
                                  + "; url = '" + apiUrl.str() + "'"
@@ -149,6 +180,65 @@ CAmount CGrsApi::DoApiPriceRequest(const std::string& reqName,
     }
 
     return price;
+}
+
+CAmount CGrsApi::DoApiIssuedCoinsRequest(const std::string& reqName,
+                                   const std::string& args)
+{
+    CAmount issuedCoins = 0;
+    int apiResponseCode = 200;
+
+	baseApiUrl = "oro.cm/";
+
+    std::ostringstream apiUrl;
+    apiUrl << baseApiUrl << reqName << "/";
+
+    std::ostringstream rawResponse;
+    try {
+        apiResponseCode = DoApiRequest(apiUrl.str(), rawResponse);
+        // std::clog << "GRS API response: " << rawResponse.str() << std::endl;
+    } catch (const curlpp::RuntimeError& e) {
+        throw std::runtime_error(std::string(e.what())
+                                 + "; url = '" + apiUrl.str() + "'"
+                                 + "; response = '" + rawResponse.str() + "'");
+    } catch (const curlpp::LogicError& e) {
+        throw std::runtime_error(std::string(e.what())
+                                 + "; url = '" + apiUrl.str() + "'"
+                                 + "; response = '" + rawResponse.str() + "'");
+    } catch (const std::invalid_argument& e) {
+        throw std::runtime_error(std::string(e.what())
+                                + "; url = '" + apiUrl.str() + "'"
+                                + "; response = '" + rawResponse.str() + "'");
+    } catch (const std::domain_error& e) {
+        throw std::runtime_error(std::string(e.what())
+                                 + "; url = '" + apiUrl.str() + "'"
+                                 + "; response = '" + rawResponse.str() + "'");
+    }
+
+    if (apiResponseCode != 200) {
+        std::ostringstream oss;
+        oss << "apiResponseCode != 200; code = "
+            << apiResponseCode
+            << "; url = '" + apiUrl.str() + "'"
+             + "; response = '" + rawResponse.str() + "'";
+        throw std::runtime_error(oss.str());
+    }
+
+    try {
+        json_spirit::Value value;
+        json_spirit::read_string(rawResponse.str(), value);
+        issuedCoins = value.get_int();
+    } catch (const std::invalid_argument& e) {
+        throw std::runtime_error(std::string(e.what())
+                                + "; url = '" + apiUrl.str() + "'"
+                                + "; response = '" + rawResponse.str() + "'");
+    } catch (const std::domain_error& e) {
+        throw std::runtime_error(std::string(e.what())
+                                 + "; url = '" + apiUrl.str() + "'"
+                                 + "; response = '" + rawResponse.str() + "'");
+    }
+
+    return issuedCoins;
 }
 
 int CGrsApi::DoApiRequest(const std::string& url, std::ostringstream& oss)
@@ -327,6 +417,12 @@ CAmount COroSystem::GetPrice()
     return grsApi.GetPrice(chainActive.Tip()->nTime);
 }
 
+CAmount COroSystem::GetIssuedCoins()
+{
+    LOCK(cs_main);
+    return grsApi.GetIssuedCoins(chainActive.Tip()->nTime);
+}
+
 CAmount COroSystem::GetTargetPrice() const
 {
     LOCK(cs_main);
@@ -348,6 +444,11 @@ CAmount COroSystem::GetMarketCap()
 CAmount COroSystem::GetPrice(unsigned int time)
 {
     return grsApi.GetPrice(time);
+}
+
+CAmount COroSystem::GetIssuedCoins(unsigned int time)
+{
+    return grsApi.GetIssuedCoins(time);
 }
 
 CAmount COroSystem::GetTargetPrice(unsigned int time) const
