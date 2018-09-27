@@ -200,14 +200,14 @@ void OverviewPage::setOROInfo(const CAmount& blockReward, const CAmount& coinPri
     currentCoinPrice = coinPrice;
     currentTargetPrice = targetPrice;
     currentTotalCoins = totalCoins;
-    currentIssuedCoins = issuedCoins;
+    currentIssuedCoins = issuedCoins * 1000;
 
-    currentMarketCap = coinPrice * issuedCoins / 1000;
+    currentMarketCap = coinPrice * issuedCoins;
 
     ui->labelBlockReward->setText(BitcoinUnits::formatWithUnit(unit, 1, false, BitcoinUnits::separatorComma, true, false));
     ui->labelCoinPrice->setText(USDUnits::formatWithUnit(unit, coinPrice, false, USDUnits::separatorComma));
     ui->labelTotalCoins->setText(BitcoinUnits::formatWithUnit(unit, totalCoins, false, BitcoinUnits::separatorComma, true, true));
-    ui->labelIssuedCoins->setText(BitcoinUnits::formatWithUnit(unit, issuedCoins, false, BitcoinUnits::separatorComma, true, true));
+    ui->labelIssuedCoins->setText(BitcoinUnits::formatWithUnit(unit, currentIssuedCoins, false, BitcoinUnits::separatorComma, true, true));
     ui->labelMarketCap->setText(USDUnits::formatWithUnit(unit, currentMarketCap, false, USDUnits::separatorComma, true, true));
 }
 
