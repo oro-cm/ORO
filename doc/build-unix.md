@@ -1,11 +1,11 @@
 UNIX BUILD NOTES
 ====================
-Some notes on how to build Oro in Unix. 
+Some notes on how to build ORO in Unix.
 
 Note
 ---------------------
-Always use absolute paths to configure and compile bitcoin and the dependencies,
-for example, when specifying the the path of the dependency:
+Always use absolute paths to configure and compile oro and the dependencies,
+for example, when specifying the path of the dependency:
 
 	../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$BDB_PREFIX
 
@@ -33,6 +33,7 @@ These dependencies are required:
  ------------|------------------|----------------------
  libssl      | SSL Support      | Secure communications
  libboost    | Boost            | C++ Library
+ libevent    | Events           | Asynchronous event notification
 
 Optional dependencies:
 
@@ -43,6 +44,7 @@ Optional dependencies:
  qt          | GUI              | GUI toolkit (only needed when GUI enabled)
  protobuf    | Payments in GUI  | Data interchange format used for payment protocol (only needed when GUI enabled)
  libqrencode | QR codes in GUI  | Optional for generating QR codes (only needed when GUI enabled)
+ univalue    | Utility          | JSON parsing and encoding (bundled version will be used unless --with-system-univalue passed to configure)
 
 For the versions used in the release, see [release-process.md](release-process.md) under *Fetch and build inputs*.
 
@@ -50,16 +52,16 @@ System requirements
 --------------------
 
 C++ compilers are memory-hungry. It is recommended to have at least 1 GB of
-memory available when compiling Oro Core. With 512MB of memory or less
+memory available when compiling ORO Core. With 512MB of memory or less
 compilation will take much longer due to swap thrashing.
 
 Dependency Build Instructions: Ubuntu & Debian
 ----------------------------------------------
 Build requirements:
 
-	sudo apt-get install build-essential libtool autotools-dev autoconf pkg-config libssl-dev
-	
-for Ubuntu 12.04 and later or Debian 7 and later libboost-all-dev has to be installed:
+	sudo apt-get install build-essential libtool autotools-dev autoconf pkg-config libssl-dev libevent-dev
+
+For Ubuntu 12.04 and later or Debian 7 and later libboost-all-dev has to be installed:
 
 	sudo apt-get install libboost-all-dev
 
@@ -72,18 +74,7 @@ for Ubuntu 12.04 and later or Debian 7 and later libboost-all-dev has to be inst
  Ubuntu 12.04 and later have packages for libdb5.1-dev and libdb5.1++-dev,
  but using these will break binary wallet compatibility, and is not recommended.
 
-for Debian 7 (Wheezy) and later:
- The oldstable repository contains db4.8 packages.
- Add the following line to /etc/apt/sources.list,
- replacing [mirror] with any official debian mirror.
-
-	deb http://[mirror]/debian/ oldstable main
-
-To enable the change run
-
-	sudo apt-get update
-
-for other Debian & Ubuntu (with ppa):
+For other Debian & Ubuntu (with ppa):
 
 	sudo apt-get install libdb4.8-dev libdb4.8++-dev
 
@@ -94,14 +85,10 @@ Optional:
 Dependencies for the GUI: Ubuntu & Debian
 -----------------------------------------
 
-If you want to build oro-qt, make sure that the required packages for Qt development
-are installed. Either Qt 4 or Qt 5 are necessary to build the GUI.
-If both Qt 4 and Qt 5 are installed, Qt 4 will be used. Pass `--with-gui=qt5` to configure to choose Qt5.
+If you want to build ORO-Qt, make sure that the required packages for Qt development
+are installed. Qt 5 is necessary to build the GUI.
+If both Qt 4 and Qt 5 are installed, Qt 5 will be used.
 To build without GUI pass `--without-gui`.
-
-To build with Qt 4 you need the following:
-
-    sudo apt-get install libqt4-dev libprotobuf-dev protobuf-compiler
 
 For Qt 5 you need the following:
 
@@ -147,7 +134,7 @@ It is recommended to use Berkeley DB 4.8. If you have to build it yourself:
 ```bash
 ORO_ROOT=$(pwd)
 
-# Pick some path to install BDB to, here we create a directory within the bitcoin directory
+# Pick some path to install BDB to, here we create a directory within the oro directory
 BDB_PREFIX="${ORO_ROOT}/db4"
 mkdir -p $BDB_PREFIX
 
@@ -163,7 +150,7 @@ cd db-4.8.30.NC/build_unix/
 ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$BDB_PREFIX
 make install
 
-# Configure Oro Core to use our own-built instance of BDB
+# Configure ORO Core to use our own-built instance of BDB
 cd $ORO_ROOT
 ./configure (other args...) LDFLAGS="-L${BDB_PREFIX}/lib/" CPPFLAGS="-I${BDB_PREFIX}/include/"
 ```
@@ -181,7 +168,7 @@ If you need to build Boost yourself:
 
 Security
 --------
-To help make your oro installation more secure by making certain attacks impossible to
+To help make your ORO installation more secure by making certain attacks impossible to
 exploit even if a vulnerability is found, binaries are hardened by default.
 This can be disabled with:
 
@@ -205,7 +192,7 @@ Hardening enables the following features:
 
     To test that you have built PIE executable, install scanelf, part of paxutils, and use:
 
-    	scanelf -e ./oro
+    	scanelf -e ./orod
 
     The output should contain:
      TYPE
@@ -219,23 +206,10 @@ Hardening enables the following features:
     executable without the non-executable stack protection.
 
     To verify that the stack is non-executable after compiling use:
-    `scanelf -e ./oro`
+    `scanelf -e ./orod`
 
     the output should contain:
 	STK/REL/PTL
 	RW- R-- RW-
 
     The STK RW- means that the stack is readable and writeable but not executable.
-
-Disable-wallet mode
---------------------
-When the intention is to run only a P2P node without a wallet, oro may be compiled in
-disable-wallet mode with:
-
-    ./configure --disable-wallet
-
-In this case there is no dependency on Berkeley DB 4.8.
-
-Mining is also possible in disable-wallet mode, but only using the `getblocktemplate` RPC
-call not `getwork`.
-

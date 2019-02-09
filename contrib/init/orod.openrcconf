@@ -1,0 +1,26 @@
+# /etc/conf.d/orod: config file for /etc/init.d/orod
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/oro/oro.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/orod"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/orod.pid"
+
+# Where to write orod data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/orod"
+
+# User and group to own orod process
+#BITCOIND_USER="oro"
+#BITCOIND_GROUP="oro"
+
+# Path to orod executable
+#BITCOIND_BIN="/usr/bin/orod"
+
+# Nice value to run orod under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS=""

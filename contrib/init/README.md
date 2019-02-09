@@ -1,9 +1,10 @@
 Sample configuration files for:
 
-SystemD: bitcoind.service
-Upstart: bitcoind.conf
-OpenRC:  bitcoind.openrc
-         bitcoind.openrcconf
+SystemD: orod.service
+Upstart: orod.conf
+OpenRC:  orod.openrc
+         orod.openrcconf
+CentOS:  orod.init
 
 have been made available to assist packagers in creating node packages here.
 

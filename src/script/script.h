@@ -1,5 +1,8 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2016-2017 The PIVX developers
+// Copyright (c) 2018-2019 The ORO developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -9,11 +12,14 @@
 #include <assert.h>
 #include <climits>
 #include <limits>
+#include "pubkey.h"
 #include <stdexcept>
 #include <stdint.h>
 #include <string.h>
 #include <string>
 #include <vector>
+
+typedef std::vector<unsigned char> valtype;
 
 static const unsigned int MAX_SCRIPT_ELEMENT_SIZE = 520; // bytes
 
@@ -158,9 +164,11 @@ enum opcodetype
     OP_NOP9 = 0xb8,
     OP_NOP10 = 0xb9,
 
+    // zerocoin
+    OP_ZEROCOINMINT = 0xc1,
+    OP_ZEROCOINSPEND = 0xc2,
 
     // template matching params
-    OP_SMALLDATA = 0xf9,
     OP_SMALLINTEGER = 0xfa,
     OP_PUBKEYS = 0xfb,
     OP_PUBKEYHASH = 0xfd,
@@ -437,6 +445,12 @@ public:
         return *this;
     }
 
+    CScript& operator<<(const CPubKey& key)
+    {
+        std::vector<unsigned char> vchKey = key.Raw();
+        return (*this) << vchKey;
+    }
+
 
     bool GetOp(iterator& pc, opcodetype& opcodeRet, std::vector<unsigned char>& vchRet)
     {
@@ -577,9 +591,13 @@ public:
      */
     unsigned int GetSigOpCount(const CScript& scriptSig) const;
 
+    bool IsNormalPaymentScript() const;
     bool IsPayToScriptHash() const;
+    bool IsZerocoinMint() const;
+    bool IsZerocoinSpend() const;
 
     /** Called by IsStandardTx and P2SH/BIP62 VerifyScript (which makes it consensus-critical). */
+    bool IsPushOnly(const_iterator pc) const;
     bool IsPushOnly() const;
 
     /**

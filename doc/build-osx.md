@@ -1,6 +1,6 @@
 Mac OS X Build Instructions and Notes
 ====================================
-This guide will show you how to build orod(headless client) for OSX.
+This guide will show you how to build orod (headless client) for OSX.
 
 Notes
 -----
@@ -38,49 +38,31 @@ Instructions: Homebrew
 
 #### Install dependencies using Homebrew
 
-        brew install autoconf automake libtool boost miniupnpc openssl pkg-config protobuf qt
-
-#### Installing berkeley-db4 using Homebrew
-
-The homebrew package for berkeley-db4 has been broken for some time.  It will install without Java though.
-
-Running this command takes you into brew's interactive mode, which allows you to configure, make, and install by hand:
-```
-$ brew install https://raw.github.com/mxcl/homebrew/master/Library/Formula/berkeley-db4.rb -–without-java 
-```
-
-The rest of these commands are run inside brew interactive mode:
-```
-/private/tmp/berkeley-db4-UGpd0O/db-4.8.30 $ cd ..
-/private/tmp/berkeley-db4-UGpd0O $ db-4.8.30/dist/configure --prefix=/usr/local/Cellar/berkeley-db4/4.8.30 --mandir=/usr/local/Cellar/berkeley-db4/4.8.30/share/man --enable-cxx
-/private/tmp/berkeley-db4-UGpd0O $ make
-/private/tmp/berkeley-db4-UGpd0O $ make install
-/private/tmp/berkeley-db4-UGpd0O $ exit
-```
-
-After exiting, you'll get a warning that the install is keg-only, which means it wasn't symlinked to `/usr/local`.  You don't need it to link it to build oro, but if you want to, here's how:
-
-    $ brew link --force berkeley-db4
-
+        brew install autoconf automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf qt5 zmq libevent
 
 ### Building `orod`
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone https://github.com/OroOrg/ORO.git
-        cd oro
+        git clone https://github.com/ORO-Project/ORO.git
+        cd ORO
 
-2.  Build orod
+2.  Make the Homebrew OpenSSL headers visible to the configure script  (do ```brew info openssl``` to find out why this is necessary, or if you use Homebrew with installation folders different from the default).
+
+        export LDFLAGS+=-L/usr/local/opt/openssl/lib
+        export CPPFLAGS+=-I/usr/local/opt/openssl/include
+
+3.  Build orod:
 
         ./autogen.sh
-        ./configure
+        ./configure --with-gui=qt5
         make
 
-3.  It is also a good idea to build and run the unit tests:
+4.  It is also a good idea to build and run the unit tests:
 
         make check
 
-4.  (Optional) You can also install orod to your path:
+5.  (Optional) You can also install orod to your path:
 
         make install
 
@@ -89,7 +71,7 @@ Use Qt Creator as IDE
 You can use Qt Creator as IDE, for debugging and for manipulating forms, etc.
 Download Qt Creator from http://www.qt.io/download/. Download the "community edition" and only install Qt Creator (uncheck the rest during the installation process).
 
-1. Make sure you installed everything through homebrew mentioned above 
+1. Make sure you installed everything through homebrew mentioned above
 2. Do a proper ./configure --with-gui=qt5 --enable-debug
 3. In Qt Creator do "New Project" -> Import Project -> Import Existing Project
 4. Enter "oro-qt" as project name, enter src/qt as location
@@ -104,9 +86,9 @@ Creating a release build
 ------------------------
 You can ignore this section if you are building `orod` for your own use.
 
-orod/oro-cli binaries are not included in the Oro-Qt.app bundle.
+orod/oro-cli binaries are not included in the oro-Qt.app bundle.
 
-If you are building `orod` or `Oro-Qt` for others, your build machine should be set up
+If you are building `orod` or `oro-qt` for others, your build machine should be set up
 as follows for maximum compatibility:
 
 All dependencies should be compiled with these flags:
@@ -115,7 +97,7 @@ All dependencies should be compiled with these flags:
  -arch x86_64
  -isysroot $(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
 
-Once dependencies are compiled, see release-process.md for how the Oro-Qt.app
+Once dependencies are compiled, see release-process.md for how the ORO-Qt.app
 bundle is packaged and signed to create the .dmg disk image that is distributed.
 
 Running
@@ -127,14 +109,14 @@ directory. We have to first create the RPC configuration file, though.
 Run `./orod` to get the filename where it should be put, or just try these
 commands:
 
-    echo -e "rpcuser=ororpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/Oro/oro.conf"
-    chmod 600 "/Users/${USER}/Library/Application Support/Oro/oro.conf"
+    echo -e "rpcuser=ororpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/ORO/oro.conf"
+    chmod 600 "/Users/${USER}/Library/Application Support/ORO/oro.conf"
 
 The next time you run it, it will start downloading the blockchain, but it won't
 output anything while it's doing this. This process may take several hours;
 you can monitor its process by looking at the debug.log file, like this:
 
-    tail -f $HOME/Library/Application\ Support/Oro/debug.log
+    tail -f $HOME/Library/Application\ Support/ORO/debug.log
 
 Other commands:
 -------

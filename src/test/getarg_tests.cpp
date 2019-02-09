@@ -1,4 +1,6 @@
-// Copyright (c) 2012-2013 The Bitcoin Core developers
+// Copyright (c) 2012-2016 The Bitcoin Core developers
+// Copyright (c) 2017 The PIVX developers
+// Copyright (c) 2018-2019 The ORO developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -20,7 +22,7 @@ static void ResetArgs(const std::string& strArg)
       boost::split(vecArg, strArg, boost::is_space(), boost::token_compress_on);
 
     // Insert dummy executable name:
-    vecArg.insert(vecArg.begin(), "testoro");
+    vecArg.insert(vecArg.begin(), "testbitcoin");
 
     // Convert to char*:
     std::vector<const char*> vecChar;
@@ -59,17 +61,17 @@ BOOST_AUTO_TEST_CASE(boolarg)
     BOOST_CHECK(!GetBoolArg("-foo", false));
     BOOST_CHECK(!GetBoolArg("-foo", true));
 
-    ResetArgs("-foo -nofoo");  // -foo should win
-    BOOST_CHECK(GetBoolArg("-foo", false));
-    BOOST_CHECK(GetBoolArg("-foo", true));
-
-    ResetArgs("-foo=1 -nofoo=1");  // -foo should win
-    BOOST_CHECK(GetBoolArg("-foo", false));
-    BOOST_CHECK(GetBoolArg("-foo", true));
-
-    ResetArgs("-foo=0 -nofoo=0");  // -foo should win
+    ResetArgs("-foo -nofoo");  // -nofoo should win
     BOOST_CHECK(!GetBoolArg("-foo", false));
     BOOST_CHECK(!GetBoolArg("-foo", true));
+
+    ResetArgs("-foo=1 -nofoo=1");  // -nofoo should win
+    BOOST_CHECK(!GetBoolArg("-foo", false));
+    BOOST_CHECK(!GetBoolArg("-foo", true));
+
+    ResetArgs("-foo=0 -nofoo=0");  // -nofoo=0 should win
+    BOOST_CHECK(GetBoolArg("-foo", false));
+    BOOST_CHECK(GetBoolArg("-foo", true));
 
     // New 0.6 feature: treat -- same as -:
     ResetArgs("--foo=1");
@@ -149,9 +151,9 @@ BOOST_AUTO_TEST_CASE(boolargno)
     BOOST_CHECK(GetBoolArg("-foo", true));
     BOOST_CHECK(GetBoolArg("-foo", false));
 
-    ResetArgs("-foo --nofoo");
-    BOOST_CHECK(GetBoolArg("-foo", true));
-    BOOST_CHECK(GetBoolArg("-foo", false));
+    ResetArgs("-foo --nofoo"); // --nofoo should win
+    BOOST_CHECK(!GetBoolArg("-foo", true));
+    BOOST_CHECK(!GetBoolArg("-foo", false));
 
     ResetArgs("-nofoo -foo"); // foo always wins:
     BOOST_CHECK(GetBoolArg("-foo", true));

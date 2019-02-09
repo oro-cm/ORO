@@ -1,5 +1,5 @@
-IDI_ICON1 ICON DISCARDABLE "icons/oro.ico"
-IDI_ICON2 ICON DISCARDABLE "icons/oro_testnet.ico"
+IDI_ICON1 ICON DISCARDABLE "icons/bitcoin.ico"
+IDI_ICON2 ICON DISCARDABLE "icons/bitcoin_testnet.ico"
 
 #include <windows.h>             // needed for VERSIONINFO
 #include "../../clientversion.h" // holds the needed client version information
@@ -19,14 +19,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "Oro"
-            VALUE "FileDescription",    "Oro Core (OSS GUI client for Bitcoin)"
+            VALUE "CompanyName",        "ORO"
+            VALUE "FileDescription",    "ORO Core (OSS GUI client for ORO)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "oro-qt"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "oro-qt.exe"
-            VALUE "ProductName",        "Oro Core"
+            VALUE "ProductName",        "ORO Core"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

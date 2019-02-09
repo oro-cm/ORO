@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>729</width>
-    <height>150</height>
+    <height>156</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -51,7 +51,7 @@
       <item>
        <widget class="QValidatedLineEdit" name="payTo">
         <property name="toolTip">
-         <string>The Oro address to send the payment to</string>
+         <string>The ORO address to send the payment to</string>
         </property>
        </widget>
       </item>
@@ -106,7 +106,7 @@
      </layout>
     </item>
     <item row="1" column="0">
-     <widget class="QLabel" name="labellLabel">
+     <widget class="QLabel" name="labelLabel">
       <property name="text">
        <string>&amp;Label:</string>
       </property>
@@ -154,7 +154,7 @@
     <item row="3" column="1">
      <widget class="QLabel" name="messageTextLabel">
       <property name="toolTip">
-       <string>A message that was attached to the oro: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Oro network.</string>
+       <string>A message that was attached to the ORO: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the ORO network.</string>
       </property>
       <property name="textFormat">
        <enum>Qt::PlainText</enum>
@@ -1214,7 +1214,7 @@
   <customwidget>
    <class>BitcoinAmountField</class>
    <extends>QLineEdit</extends>
-   <header>oroamountfield.h</header>
+   <header>bitcoinamountfield.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

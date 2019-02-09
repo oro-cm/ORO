@@ -16,14 +16,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "Oro"
-            VALUE "FileDescription",    "Orod (OSS daemon/client for Oro)"
+            VALUE "CompanyName",        "ORO"
+            VALUE "FileDescription",    "orod (OSS daemon/client for ORO)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "orod"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "orod.exe"
-            VALUE "ProductName",        "Orod"
+            VALUE "ProductName",        "orod"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

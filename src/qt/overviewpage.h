@@ -1,4 +1,6 @@
 // Copyright (c) 2011-2013 The Bitcoin developers
+// Copyright (c) 2017 The PIVX developers
+// Copyright (c) 2018-2019 The ORO developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -14,8 +16,9 @@ class TransactionFilterProxy;
 class TxViewDelegate;
 class WalletModel;
 
-namespace Ui {
-    class OverviewPage;
+namespace Ui
+{
+class OverviewPage;
 }
 
 QT_BEGIN_NAMESPACE
@@ -28,52 +31,45 @@ class OverviewPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit OverviewPage(QWidget *parent = 0);
+    explicit OverviewPage(QWidget* parent = 0);
     ~OverviewPage();
 
-    void setClientModel(ClientModel *clientModel);
-    void setWalletModel(WalletModel *walletModel);
+    void setClientModel(ClientModel* clientModel);
+    void setWalletModel(WalletModel* walletModel);
     void showOutOfSyncWarning(bool fShow);
 
 public slots:
-    void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
+    void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, 
+                    const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
                     const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
-    
-    void setOROInfo(const CAmount& blockReward, const CAmount& coinPrice,
-                    const CAmount& targetPrice, const CAmount& totalCoins,
-                    const CAmount& issuedCoins, const CAmount& marketCap);
-
-    /** Set number of blocks shown in the UI */
-    void setNumBlocks(int count);
 
 signals:
-    void transactionClicked(const QModelIndex &index);
+    void transactionClicked(const QModelIndex& index);
 
 private:
-    Ui::OverviewPage *ui;
-    ClientModel *clientModel;
-    WalletModel *walletModel;
+    QTimer* timer;
+    Ui::OverviewPage* ui;
+    ClientModel* clientModel;
+    WalletModel* walletModel;
     CAmount currentBalance;
     CAmount currentUnconfirmedBalance;
     CAmount currentImmatureBalance;
+    CAmount currentZerocoinBalance;
+    CAmount currentUnconfirmedZerocoinBalance;
+    CAmount currentimmatureZerocoinBalance;
     CAmount currentWatchOnlyBalance;
     CAmount currentWatchUnconfBalance;
     CAmount currentWatchImmatureBalance;
+    int nDisplayUnit;
+    void getPercentage(CAmount nTotalBalance, CAmount nZerocoinBalance, QString& sOROPercentage, QString& szOROPercentage);
 
-    CAmount currentBlockReward;
-    CAmount currentCoinPrice;
-    CAmount currentTargetPrice;
-    CAmount currentTotalCoins;
-    CAmount currentIssuedCoins;
-    CAmount currentMarketCap;
-
-    TxViewDelegate *txdelegate;
-    TransactionFilterProxy *filter;
+    TxViewDelegate* txdelegate;
+    TransactionFilterProxy* filter;
 
 private slots:
     void updateDisplayUnit();
-    void handleTransactionClicked(const QModelIndex &index);
-    void updateAlerts(const QString &warnings);
+    void handleTransactionClicked(const QModelIndex& index);
+    void updateAlerts(const QString& warnings);
     void updateWatchOnlyLabels(bool showWatchOnly);
 };
 

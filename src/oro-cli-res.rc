@@ -19,7 +19,7 @@ BEGIN
             VALUE "CompanyName",        "Oro"
             VALUE "FileDescription",    "Oro-cli (OSS RPC client for Oro)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
-            VALUE "InternalName",       "bitcoin-cli"
+            VALUE "InternalName",       "oro-cli"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "oro-cli.exe"

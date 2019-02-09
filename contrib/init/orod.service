@@ -1,0 +1,26 @@
+[Unit]
+Description=ORO's distributed currency daemon
+After=network.target
+
+[Service]
+User=oro
+Group=oro
+
+Type=forking
+PIDFile=/var/lib/orod/orod.pid
+
+ExecStart=/usr/bin/orod -daemon -pid=/var/lib/orod/orod.pid \
+          -conf=/etc/oro/oro.conf -datadir=/var/lib/orod
+
+ExecStop=-/usr/bin/oro-cli -conf=/etc/oro/oro.conf \
+         -datadir=/var/lib/orod stop
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

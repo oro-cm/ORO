@@ -1,5 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2013 The Bitcoin developers
+// Copyright (c) 2015-2017 The PIVX developers
+// Copyright (c) 2018-2019 The ORO developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,13 +9,13 @@
 #define BITCOIN_PRIMITIVES_BLOCK_H
 
 #include "primitives/transaction.h"
+#include "keystore.h"
 #include "serialize.h"
 #include "uint256.h"
 
-static const int32_t BLOCK_VERSION_0_1 = (0 << 16) | 1;
-static const int32_t BLOCK_VERSION_0_2 = (0 << 16) | 2;
-static const int32_t BLOCK_VERSION_0_3 = (0 << 16) | 3;
-static const int32_t BLOCK_VERSION_1_3 = (1 << 16) | 3;
+/** The maximum allowed size for a serialized block, in bytes (network rule) */
+static const unsigned int MAX_BLOCK_SIZE_CURRENT = 2000000;
+static const unsigned int MAX_BLOCK_SIZE_LEGACY = 1000000;
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,
  * and scan through nonce values to make the block's hash satisfy proof-of-work
@@ -26,16 +28,14 @@ class CBlockHeader
 {
 public:
     // header
-    static const int16_t CURRENT_ORO_VERSION = 1;
-    static const int16_t CURRENT_BTC_VERSION = 3;
-    static const int32_t CURRENT_VERSION = (CURRENT_ORO_VERSION << 16) | CURRENT_BTC_VERSION;
-
+    static const int32_t CURRENT_VERSION=4;
     int32_t nVersion;
     uint256 hashPrevBlock;
     uint256 hashMerkleRoot;
     uint32_t nTime;
     uint32_t nBits;
     uint32_t nNonce;
+    uint256 nAccumulatorCheckpoint;
 
     CBlockHeader()
     {
@@ -53,51 +53,29 @@ public:
         READWRITE(nTime);
         READWRITE(nBits);
         READWRITE(nNonce);
+
+        //zerocoin active, header changes to include accumulator checksum
+        if(nVersion > 3)
+            READWRITE(nAccumulatorCheckpoint);
     }
 
     void SetNull()
     {
         nVersion = CBlockHeader::CURRENT_VERSION;
-        hashPrevBlock = 0;
-        hashMerkleRoot = 0;
+        hashPrevBlock.SetNull();
+        hashMerkleRoot.SetNull();
         nTime = 0;
         nBits = 0;
         nNonce = 0;
+        nAccumulatorCheckpoint = 0;
     }
 
     bool IsNull() const
     {
         return (nBits == 0);
     }
-    
-    
-    int16_t GetBtcVersion() const
-    {
-        return nVersion & 65535;
-    }
-    
-    int16_t GetOroVersion() const
-    {
-        return nVersion & (65535 << 16);
-    }
-    
-    int32_t SetBtcVersion(int16_t v)
-    {
-        int16_t high = GetOroVersion();
-        nVersion = (high << 16) | v;
-        return nVersion;
-    }
-    
-    int32_t SetOroVersion(int16_t v)
-    {
-        int16_t low = GetBtcVersion();
-        nVersion = (v << 16) | low;
-        return nVersion;
-    }
 
     uint256 GetHash() const;
-
-    uint256 GetPoW() const;
 
     int64_t GetBlockTime() const
     {
@@ -112,7 +90,11 @@ public:
     // network and disk
     std::vector<CTransaction> vtx;
 
+    // ppcoin: block signature - signed by one of the coin base txout[N]'s owner
+    std::vector<unsigned char> vchBlockSig;
+
     // memory only
+    mutable CScript payee;
     mutable std::vector<uint256> vMerkleTree;
 
     CBlock()
@@ -132,6 +114,8 @@ public:
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
         READWRITE(*(CBlockHeader*)this);
         READWRITE(vtx);
+	if(vtx.size() > 1 && vtx[1].IsCoinStake())
+		READWRITE(vchBlockSig);
     }
 
     void SetNull()
@@ -139,6 +123,8 @@ public:
         CBlockHeader::SetNull();
         vtx.clear();
         vMerkleTree.clear();
+        payee = CScript();
+        vchBlockSig.clear();
     }
 
     CBlockHeader GetBlockHeader() const
@@ -150,7 +136,26 @@ public:
         block.nTime          = nTime;
         block.nBits          = nBits;
         block.nNonce         = nNonce;
+        block.nAccumulatorCheckpoint = nAccumulatorCheckpoint;
         return block;
+    }
+
+    // ppcoin: two types of block: proof-of-work or proof-of-stake
+    bool IsProofOfStake() const
+    {
+        return (vtx.size() > 1 && vtx[1].IsCoinStake());
+    }
+
+    bool IsProofOfWork() const
+    {
+        return !IsProofOfStake();
+    }
+
+    bool IsZerocoinStake() const;
+
+    std::pair<COutPoint, unsigned int> GetProofOfStake() const
+    {
+        return IsProofOfStake()? std::make_pair(vtx[1].vin[0].prevout, nTime) : std::make_pair(COutPoint(), (unsigned int)0);
     }
 
     // Build the in-memory merkle tree for this block and return the merkle root.
@@ -162,6 +167,7 @@ public:
     std::vector<uint256> GetMerkleBranch(int nIndex) const;
     static uint256 CheckMerkleBranch(uint256 hash, const std::vector<uint256>& vMerkleBranch, int nIndex);
     std::string ToString() const;
+    void print() const;
 };
 
 

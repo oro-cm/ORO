@@ -1,10 +1,13 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2018 The PIVX developers
+// Copyright (c) 2018-2019 The ORO developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_UINT256_H
-#define BITCOIN_UINT256_H
+#ifndef ORO_UINT256_H
+#define ORO_UINT256_H
 
 #include <assert.h>
 #include <cstring>
@@ -13,20 +16,21 @@
 #include <string>
 #include <vector>
 
-class uint_error : public std::runtime_error {
+class uint_error : public std::runtime_error
+{
 public:
     explicit uint_error(const std::string& str) : std::runtime_error(str) {}
 };
 
 /** Template base class for unsigned big integers. */
-template<unsigned int BITS>
+template <unsigned int BITS>
 class base_uint
 {
 protected:
-    enum { WIDTH=BITS/32 };
+    enum { WIDTH = BITS / 32 };
     uint32_t pn[WIDTH];
-public:
 
+public:
     base_uint()
     {
         for (int i = 0; i < WIDTH; i++)
@@ -38,6 +42,21 @@ public:
         for (int i = 0; i < WIDTH; i++)
             pn[i] = b.pn[i];
     }
+
+
+    bool IsNull() const
+    {
+        for (int i = 0; i < WIDTH; i++)
+            if (pn[i] != 0)
+                return false;
+        return true;
+    }
+
+    void SetNull()
+    {
+        memset(pn, 0, sizeof(pn));
+    }
+
 
     base_uint& operator=(const base_uint& b)
     {
@@ -134,8 +153,7 @@ public:
     base_uint& operator+=(const base_uint& b)
     {
         uint64_t carry = 0;
-        for (int i = 0; i < WIDTH; i++)
-        {
+        for (int i = 0; i < WIDTH; i++) {
             uint64_t n = carry + pn[i] + b.pn[i];
             pn[i] = n & 0xffffffff;
             carry = n >> 32;
@@ -173,7 +191,7 @@ public:
     {
         // prefix operator
         int i = 0;
-        while (++pn[i] == 0 && i < WIDTH-1)
+        while (++pn[i] == 0 && i < WIDTH - 1)
             i++;
         return *this;
     }
@@ -190,7 +208,7 @@ public:
     {
         // prefix operator
         int i = 0;
-        while (--pn[i] == (uint32_t)-1 && i < WIDTH-1)
+        while (--pn[i] == (uint32_t)-1 && i < WIDTH - 1)
             i++;
         return *this;
     }
@@ -229,6 +247,7 @@ public:
     void SetHex(const char* psz);
     void SetHex(const std::string& str);
     std::string ToString() const;
+    std::string ToStringReverseEndian() const;
 
     unsigned char* begin()
     {
@@ -255,6 +274,15 @@ public:
         return sizeof(pn);
     }
 
+    uint64_t Get64(int n = 0) const
+    {
+        return pn[2 * n] | (uint64_t)pn[2 * n + 1] << 32;
+    }
+
+    uint32_t Get32(int n = 0) const
+    {
+        return pn[2 * n];
+    }
     /**
      * Returns the position of the highest bit set plus one, or zero if the
      * value is zero.
@@ -272,21 +300,26 @@ public:
         return sizeof(pn);
     }
 
-    template<typename Stream>
+    template <typename Stream>
     void Serialize(Stream& s, int nType, int nVersion) const
     {
         s.write((char*)pn, sizeof(pn));
     }
 
-    template<typename Stream>
+    template <typename Stream>
     void Unserialize(Stream& s, int nType, int nVersion)
     {
         s.read((char*)pn, sizeof(pn));
     }
+
+    friend class uint160;
+    friend class uint256;
+    friend class uint512;
 };
 
 /** 160-bit unsigned big integer. */
-class uint160 : public base_uint<160> {
+class uint160 : public base_uint<160>
+{
 public:
     uint160() {}
     uint160(const base_uint<160>& b) : base_uint<160>(b) {}
@@ -296,14 +329,15 @@ public:
 };
 
 /** 256-bit unsigned big integer. */
-class uint256 : public base_uint<256> {
+class uint256 : public base_uint<256>
+{
 public:
     uint256() {}
     uint256(const base_uint<256>& b) : base_uint<256>(b) {}
     uint256(uint64_t b) : base_uint<256>(b) {}
     explicit uint256(const std::string& str) : base_uint<256>(str) {}
     explicit uint256(const std::vector<unsigned char>& vch) : base_uint<256>(vch) {}
-    
+
     /**
      * The "compact" format is a representation of a whole
      * number N using an unsigned 32bit number similar to a
@@ -324,10 +358,57 @@ public:
      * complexities of the sign bit and using base 256 are probably an
      * implementation accident.
      */
-    uint256& SetCompact(uint32_t nCompact, bool *pfNegative = NULL, bool *pfOverflow = NULL);
+    uint256& SetCompact(uint32_t nCompact, bool* pfNegative = NULL, bool* pfOverflow = NULL);
     uint32_t GetCompact(bool fNegative = false) const;
-
     uint64_t GetHash(const uint256& salt) const;
 };
 
-#endif // BITCOIN_UINT256_H
+/* uint256 from const char *.
+ * This is a separate function because the constructor uint256(const char*) can result
+ * in dangerously catching uint256(0).
+ */
+inline uint256 uint256S(const char* str)
+{
+    uint256 rv;
+    rv.SetHex(str);
+    return rv;
+}
+/* uint256 from std::string.
+ * This is a separate function because the constructor uint256(const std::string &str) can result
+ * in dangerously catching uint256(0) via std::string(const char*).
+ */
+inline uint256 uint256S(const std::string& str)
+{
+    uint256 rv;
+    rv.SetHex(str);
+    return rv;
+}
+
+/** 512-bit unsigned big integer. */
+class uint512 : public base_uint<512>
+{
+public:
+    uint512() {}
+    uint512(const base_uint<512>& b) : base_uint<512>(b) {}
+    uint512(uint64_t b) : base_uint<512>(b) {}
+    explicit uint512(const std::string& str) : base_uint<512>(str) {}
+    explicit uint512(const std::vector<unsigned char>& vch) : base_uint<512>(vch) {}
+
+    uint256 trim256() const
+    {
+        uint256 ret;
+        for (unsigned int i = 0; i < uint256::WIDTH; i++) {
+            ret.pn[i] = pn[i];
+        }
+        return ret;
+    }
+};
+
+inline uint512 uint512S(const std::string& str)
+{
+    uint512 rv;
+    rv.SetHex(str);
+    return rv;
+}
+
+#endif // ORO_UINT256_H

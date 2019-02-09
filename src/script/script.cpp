@@ -1,10 +1,11 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2017-2018 The PIVX developers
+// Copyright (c) 2018-2019 The ORO developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "script.h"
-
 #include "tinyformat.h"
 #include "utilstrencodings.h"
 
@@ -151,10 +152,14 @@ const char* GetOpName(opcodetype opcode)
     case OP_NOP9                   : return "OP_NOP9";
     case OP_NOP10                  : return "OP_NOP10";
 
+    // zerocoin
+    case OP_ZEROCOINMINT           : return "OP_ZEROCOINMINT";
+    case OP_ZEROCOINSPEND          : return "OP_ZEROCOINSPEND";
+
     case OP_INVALIDOPCODE          : return "OP_INVALIDOPCODE";
 
     // Note:
-    //  The template matching params OP_SMALLDATA/etc are defined in opcodetype enum
+    //  The template matching params OP_SMALLINTEGER/etc are defined in opcodetype enum
     //  as kind of implementation hack, they are *NOT* real opcodes.  If found in real
     //  Script, just let the default: case deal with them.
 
@@ -211,6 +216,30 @@ unsigned int CScript::GetSigOpCount(const CScript& scriptSig) const
     return subscript.GetSigOpCount(true);
 }
 
+bool CScript::IsNormalPaymentScript() const
+{
+    if(this->size() != 25) return false;
+
+    std::string str;
+    opcodetype opcode;
+    const_iterator pc = begin();
+    int i = 0;
+    while (pc < end())
+    {
+        GetOp(pc, opcode);
+
+        if(     i == 0 && opcode != OP_DUP) return false;
+        else if(i == 1 && opcode != OP_HASH160) return false;
+        else if(i == 3 && opcode != OP_EQUALVERIFY) return false;
+        else if(i == 4 && opcode != OP_CHECKSIG) return false;
+        else if(i == 5) return false;
+
+        i++;
+    }
+
+    return true;
+}
+
 bool CScript::IsPayToScriptHash() const
 {
     // Extra-fast test for pay-to-script-hash CScripts:
@@ -220,9 +249,23 @@ bool CScript::IsPayToScriptHash() const
             this->at(22) == OP_EQUAL);
 }
 
-bool CScript::IsPushOnly() const
+bool CScript::IsZerocoinMint() const
 {
-    const_iterator pc = begin();
+    //fast test for Zerocoin Mint CScripts
+    return (this->size() > 0 &&
+        this->at(0) == OP_ZEROCOINMINT);
+}
+
+bool CScript::IsZerocoinSpend() const
+{
+    if (this->empty())
+        return false;
+
+    return (this->at(0) == OP_ZEROCOINSPEND);
+}
+
+bool CScript::IsPushOnly(const_iterator pc) const
+{
     while (pc < end())
     {
         opcodetype opcode;
@@ -236,6 +279,11 @@ bool CScript::IsPushOnly() const
             return false;
     }
     return true;
+}
+
+bool CScript::IsPushOnly() const
+{
+    return this->IsPushOnly(begin());
 }
 
 std::string CScript::ToString() const
@@ -253,10 +301,16 @@ std::string CScript::ToString() const
             str += "[error]";
             return str;
         }
-        if (0 <= opcode && opcode <= OP_PUSHDATA4)
+        if (0 <= opcode && opcode <= OP_PUSHDATA4) {
             str += ValueString(vch);
-        else
+        } else {
             str += GetOpName(opcode);
+            if (opcode == OP_ZEROCOINSPEND) {
+                //Zerocoinspend has no further op codes.
+                break;
+            }
+        }
+
     }
     return str;
 }

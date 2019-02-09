@@ -1,6 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
-// Copyright (c) 2015 The Oro developers
+// Copyright (c) 2016-2017 The PIVX developers
+// Copyright (c) 2018-2019 The ORO developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -23,7 +24,7 @@ public:
     CBaseMainParams()
     {
         networkID = CBaseChainParams::MAIN;
-        nRPCPort = 9776;
+        nRPCPort = 41002;
     }
 };
 static CBaseMainParams mainParams;
@@ -37,8 +38,8 @@ public:
     CBaseTestNetParams()
     {
         networkID = CBaseChainParams::TESTNET;
-        nRPCPort = 19776;
-        strDataDir = "testnet3";
+        nRPCPort = 42995;
+        strDataDir = "testnet4";
     }
 };
 static CBaseTestNetParams testNetParams;

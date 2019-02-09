@@ -1,5 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The PIVX developers
+// Copyright (c) 2018-2019 The ORO developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,6 +12,10 @@
 #include "script/script.h"
 #include "serialize.h"
 #include "uint256.h"
+
+#include <list>
+
+class CTransaction;
 
 /** An outpoint - a combination of a transaction hash and an index n into its vout */
 class COutPoint
@@ -28,8 +34,9 @@ public:
         READWRITE(FLATDATA(*this));
     }
 
-    void SetNull() { hash = 0; n = (uint32_t) -1; }
-    bool IsNull() const { return (hash == 0 && n == (uint32_t) -1); }
+    void SetNull() { hash.SetNull(); n = (uint32_t) -1; }
+    bool IsNull() const { return (hash.IsNull() && n == (uint32_t) -1); }
+    bool IsMasternodeReward(const CTransaction* tx) const;
 
     friend bool operator<(const COutPoint& a, const COutPoint& b)
     {
@@ -47,6 +54,10 @@ public:
     }
 
     std::string ToString() const;
+    std::string ToStringShort() const;
+
+    uint256 GetHash();
+
 };
 
 /** An input of a transaction.  It contains the location of the previous
@@ -59,6 +70,7 @@ public:
     COutPoint prevout;
     CScript scriptSig;
     uint32_t nSequence;
+    CScript prevPubKey;
 
     CTxIn()
     {
@@ -105,6 +117,7 @@ class CTxOut
 public:
     CAmount nValue;
     CScript scriptPubKey;
+    int nRounds;
 
     CTxOut()
     {
@@ -125,6 +138,7 @@ public:
     {
         nValue = -1;
         scriptPubKey.clear();
+        nRounds = -10; // an initial value, should be no way to get this by calculations
     }
 
     bool IsNull() const
@@ -132,26 +146,42 @@ public:
         return (nValue == -1);
     }
 
+    void SetEmpty()
+    {
+        nValue = 0;
+        scriptPubKey.clear();
+    }
+
+    bool IsEmpty() const
+    {
+        return (nValue == 0 && scriptPubKey.empty());
+    }
+
     uint256 GetHash() const;
 
     bool IsDust(CFeeRate minRelayTxFee) const
     {
-        // "Dust" is defined in terms of CTransaction::minRelayTxFee,
-        // which has units satoshis-per-kilobyte.
-        // If you'd pay more than 1/3 in fees
-        // to spend something, then we consider it dust.
-        // A typical txout is 34 bytes big, and will
-        // need a CTxIn of at least 148 bytes to spend:
-        // so dust is a txout less than 546 satoshis 
-        // with default minRelayTxFee.
+        // "Dust" is defined in terms of CTransaction::minRelayTxFee, which has units upiv-per-kilobyte.
+        // If you'd pay more than 1/3 in fees to spend something, then we consider it dust.
+        // A typical txout is 34 bytes big, and will need a CTxIn of at least 148 bytes to spend
+        // i.e. total is 148 + 32 = 182 bytes. Default -minrelaytxfee is 10000 upiv per kB
+        // and that means that fee per txout is 182 * 10000 / 1000 = 1820 upiv.
+        // So dust is a txout less than 1820 *3 = 5460 upiv
+        // with default -minrelaytxfee = minRelayTxFee = 10000 upiv per kB.
         size_t nSize = GetSerializeSize(SER_DISK,0)+148u;
         return (nValue < 3*minRelayTxFee.GetFee(nSize));
+    }
+
+    bool IsZerocoinMint() const
+    {
+        return !scriptPubKey.empty() && scriptPubKey.IsZerocoinMint();
     }
 
     friend bool operator==(const CTxOut& a, const CTxOut& b)
     {
         return (a.nValue       == b.nValue &&
-                a.scriptPubKey == b.scriptPubKey);
+                a.scriptPubKey == b.scriptPubKey &&
+                a.nRounds      == b.nRounds);
     }
 
     friend bool operator!=(const CTxOut& a, const CTxOut& b)
@@ -183,9 +213,10 @@ public:
     // and bypass the constness. This is safe, as they update the entire
     // structure, including the hash.
     const int32_t nVersion;
-    const std::vector<CTxIn> vin;
-    const std::vector<CTxOut> vout;
+    std::vector<CTxIn> vin;
+    std::vector<CTxOut> vout;
     const uint32_t nLockTime;
+    //const unsigned int nTime;
 
     /** Construct a CTransaction that qualifies as IsNull() */
     CTransaction();
@@ -227,10 +258,38 @@ public:
     // Compute modified tx size for priority calculation (optionally given tx size)
     unsigned int CalculateModifiedSize(unsigned int nTxSize=0) const;
 
+    bool IsZerocoinSpend() const
+    {
+        return (vin.size() > 0 && vin[0].prevout.hash == 0 && vin[0].scriptSig[0] == OP_ZEROCOINSPEND);
+    }
+
+    bool IsZerocoinMint() const
+    {
+        for(const CTxOut& txout : vout) {
+            if (txout.scriptPubKey.IsZerocoinMint())
+                return true;
+        }
+        return false;
+    }
+
+    bool ContainsZerocoins() const
+    {
+        return IsZerocoinSpend() || IsZerocoinMint();
+    }
+
+    CAmount GetZerocoinMinted() const;
+    CAmount GetZerocoinSpent() const;
+    int GetZerocoinMintCount() const;
+
+    bool UsesUTXO(const COutPoint out);
+    std::list<COutPoint> GetOutPoints() const;
+
     bool IsCoinBase() const
     {
-        return (vin.size() == 1 && vin[0].prevout.IsNull());
+        return (vin.size() == 1 && vin[0].prevout.IsNull() && !ContainsZerocoins());
     }
+
+    bool IsCoinStake() const;
 
     friend bool operator==(const CTransaction& a, const CTransaction& b)
     {
@@ -243,6 +302,8 @@ public:
     }
 
     std::string ToString() const;
+
+    bool GetCoinAge(uint64_t& nCoinAge) const;  // ppcoin: get transaction coin age
 };
 
 /** A mutable version of CTransaction. */
@@ -271,6 +332,19 @@ struct CMutableTransaction
      * fly, as opposed to GetHash() in CTransaction, which uses a cached result.
      */
     uint256 GetHash() const;
+
+    std::string ToString() const;
+
+    friend bool operator==(const CMutableTransaction& a, const CMutableTransaction& b)
+    {
+        return a.GetHash() == b.GetHash();
+    }
+
+    friend bool operator!=(const CMutableTransaction& a, const CMutableTransaction& b)
+    {
+        return !(a == b);
+    }
+
 };
 
 #endif // BITCOIN_PRIMITIVES_TRANSACTION_H

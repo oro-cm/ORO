@@ -1,9 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Oro
-Comment=Oro P2P Cryptocurrency
-Comment[fr]=Oro, monnaie virtuelle cryptographique pair à pair
-Comment[tr]=Oro, eşten eşe kriptografik sanal para birimi
+Name=ORO
+Comment=ORO P2P Cryptocurrency
+Comment[fr]=ORO, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=ORO, eşten eşe kriptografik sanal para birimi
 Exec=oro-qt %u
 Terminal=false
 Type=Application

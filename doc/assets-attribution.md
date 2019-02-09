@@ -1,4 +1,4 @@
-The following is a list of assets used in the oro source and their proper attribution.
+The following is a list of assets used in the bitcoin source and their proper attribution.
 
 [Wladimir van der Laan](https://github.com/laanwj)
 -----------------------
@@ -89,15 +89,15 @@ Everaldo (Everaldo Coelho)
 ### Assets Used
 	src/qt/res/icons/debugwindow.png
 
-Oro developers
+Jonas Schnelli
 -----------------------
 
 ### Info
-* Designer: Oro developers
+* Designer: Jonas Schnelli (based on the original bitcoin logo from Bitboy)
 * License: MIT
 
 ### Assets Used
-	src/qt/res/icons/oro.icns, src/qt/res/src/oro.svg,
-	src/qt/res/src/oro.ico, src/qt/res/src/oro.png,
-	src/qt/res/src/oro_testnet.png, docs/oro_logo_doxygen.png,
+	src/qt/res/icons/bitcoin.icns, src/qt/res/src/bitcoin.svg,
+	src/qt/res/src/bitcoin.ico, src/qt/res/src/bitcoin.png,
+	src/qt/res/src/bitcoin_testnet.png, docs/bitcoin_logo_doxygen.png,
 	src/qt/res/images/splash.png, src/qt/res/images/splash_testnet.png

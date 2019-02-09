@@ -1,3 +1,9 @@
+.gitignore
+*.sublime-project
+*.sublime-workspace
+todo.txt
+reset-files.bash
+
 *.tar.gz
 
 *.exe
@@ -28,12 +34,16 @@ build-aux/test-driver
 config.log
 config.status
 configure
+confdefs.h
+conftest.cpp
+conftest.err
 libtool
 src/config/oro-config.h
 src/config/oro-config.h.in
 src/config/stamp-h1
 share/setup.nsi
 share/qt/Info.plist
+contrib/devtools/split-debug.sh
 
 src/univalue/gen
 
@@ -75,7 +85,7 @@ src/qt/test/moc*.cpp
 *.qm
 Makefile
 oro-qt
-Oro-Qt.app
+ORO-Qt.app
 
 # Unit-tests
 Makefile.test
@@ -103,12 +113,18 @@ coverage_percent.txt
 linux-coverage-build
 linux-build
 win32-build
-qa/pull-tester/run-orod-for-test.sh
+qa/pull-tester/run-bitcoind-for-test.sh
 qa/pull-tester/tests-config.sh
 qa/pull-tester/cache/*
 qa/pull-tester/test.*/*
 
 !src/leveldb*/Makefile
 
+.cproject
+.project
 /doc/doxygen/
-/dist/
+/nbproject/
+
+.idea
+CMakeLists.txt
+cmake-build-debug

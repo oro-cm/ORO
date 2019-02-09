@@ -1,5 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2017 The PIVX developers
+// Copyright (c) 2018-2019 The ORO developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -201,6 +203,15 @@ std::string base_uint<BITS>::ToString() const
 }
 
 template <unsigned int BITS>
+std::string base_uint<BITS>::ToStringReverseEndian() const
+{
+    char psz[sizeof(pn) * 2 + 1];
+    for (unsigned int i = 0; i < sizeof(pn); i++)
+        sprintf(psz + i * 2, "%02x", ((unsigned char*)pn)[i]);
+    return std::string(psz, psz + sizeof(pn) * 2);
+}
+
+template <unsigned int BITS>
 unsigned int base_uint<BITS>::bits() const
 {
     for (int pos = WIDTH - 1; pos >= 0; pos--) {
@@ -248,6 +259,15 @@ template std::string base_uint<256>::ToString() const;
 template void base_uint<256>::SetHex(const char*);
 template void base_uint<256>::SetHex(const std::string&);
 template unsigned int base_uint<256>::bits() const;
+template std::string base_uint<256>::ToStringReverseEndian() const;
+
+// Explicit instantiations for base_uint<512>
+template base_uint<512>::base_uint(const std::string&);
+template base_uint<512>& base_uint<512>::operator<<=(unsigned int);
+template base_uint<512>& base_uint<512>::operator>>=(unsigned int);
+template std::string base_uint<512>::GetHex() const;
+template std::string base_uint<512>::ToString() const;
+template std::string base_uint<512>::ToStringReverseEndian() const;
 
 // This implementation directly uses shifts instead of going
 // through an intermediate MPI representation.
@@ -266,8 +286,8 @@ uint256& uint256::SetCompact(uint32_t nCompact, bool* pfNegative, bool* pfOverfl
         *pfNegative = nWord != 0 && (nCompact & 0x00800000) != 0;
     if (pfOverflow)
         *pfOverflow = nWord != 0 && ((nSize > 34) ||
-                                     (nWord > 0xff && nSize > 33) ||
-                                     (nWord > 0xffff && nSize > 32));
+                                        (nWord > 0xff && nSize > 33) ||
+                                        (nWord > 0xffff && nSize > 32));
     return *this;
 }
 

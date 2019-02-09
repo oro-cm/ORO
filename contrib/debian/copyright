@@ -1,8 +1,8 @@
 Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?rev=174
-Upstream-Name: Oro
+Upstream-Name: Bitcoin
 Upstream-Contact: Satoshi Nakamoto <satoshin@gmx.com>
- irc://#oro@freenode.net
-Source: https://github.com/OroOrg/ORO
+ irc://#bitcoin@freenode.net
+Source: https://github.com/bitcoin/bitcoin
 
 Files: *
 Copyright: 2009-2012, Bitcoin Core Developers
