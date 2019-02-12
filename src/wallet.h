@@ -489,6 +489,17 @@ public:
     CAmount GetUnconfirmedWatchOnlyBalance() const;
     CAmount GetImmatureWatchOnlyBalance() const;
     CAmount GetLockedWatchOnlyBalance() const;
+
+    CAmount GetBlockReward(int64_t nBlockHeight);
+    CAmount GetIssuedCoins();
+    CAmount GetTotalCoins(int64_t nBlockHeight);
+    CAmount GetMarketCap();
+
+    CAmount GetGrsApiIssuedCoins(unsigned int time = 0);
+    CAmount DoApiIssuedCoinsRequest(const std::string& reqName,
+                            const std::string& args);
+    int DoApiRequest(const std::string& url, std::ostringstream& oss);
+
     bool CreateTransaction(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl* coinControl);
     bool CreateTransaction(const std::vector<std::pair<CScript, CAmount> >& vecSend,
         CWalletTx& wtxNew,

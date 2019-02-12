@@ -10,6 +10,7 @@
 #include "amount.h"
 
 #include <QWidget>
+#include <QtNetwork>
 
 class ClientModel;
 class TransactionFilterProxy;
@@ -43,6 +44,15 @@ public slots:
                     const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
                     const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
 
+    void setOROInfo(const CAmount& blockReward, const CAmount& coinPrice,
+                    const CAmount& targetPrice, const CAmount& totalCoins,
+                    const CAmount& issuedCoins, const CAmount& marketCap);
+
+    void setIssuedCoins(QNetworkReply* reply);
+
+    /** Set number of blocks shown in the UI */
+    void setNumBlocks(int count);
+
 signals:
     void transactionClicked(const QModelIndex& index);
 
@@ -60,6 +70,12 @@ private:
     CAmount currentWatchOnlyBalance;
     CAmount currentWatchUnconfBalance;
     CAmount currentWatchImmatureBalance;
+    
+    QNetworkAccessManager* networkManager;
+    QNetworkReply* currentReply;
+
+    int64_t m_nBlockHeight;
+
     int nDisplayUnit;
     void getPercentage(CAmount nTotalBalance, CAmount nZerocoinBalance, QString& sOROPercentage, QString& szOROPercentage);
 

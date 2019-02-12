@@ -825,6 +825,287 @@
                     </layout>
                    </widget>
                   </item>
+				  <item>
+                   <widget class="QFrame" name="frame_NetStatus">
+                    <property name="frameShape">
+                     <enum>QFrame::StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Raised</enum>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_NetStatus">
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_info" stretch="0,0,0">
+                       <item>
+                        <widget class="QLabel" name="label_5z_NetStatus">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>12</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>ORO Network Status</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_NetStatus">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <widget class="Line" name="line_NetStatus">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>1</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>1</height>
+                        </size>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QGridLayout" name="gridLayout_NetStatus">
+                       <property name="spacing">
+                        <number>12</number>
+                       </property>
+                       <item row="1" column="0">
+                        <widget class="QLabel" name="labelBlockRewardText">
+                         <property name="toolTip">
+                          <string>Block reward is the coin that is created in every block.</string>
+                         </property>
+                         <property name="text">
+                          <string>Block reward:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="QLabel" name="labelBlockReward">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Block reward is the coin that is created in every block.</string>
+                         </property>
+                         <property name="text">
+                          <string notr="true">0.000???000???00 ORO</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="0">
+                        <widget class="QLabel" name="labelBlockNumberText">
+                         <property name="toolTip">
+                          <string>Current block height.</string>
+                         </property>
+                         <property name="text">
+                          <string>Block Number:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="QLabel" name="labelBlockNumber">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Current block height.</string>
+                         </property>
+                         <property name="text">
+                          <string notr="true">000</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+					   <item row="3" column="0">
+                        <widget class="QLabel" name="labelCoinPriceText">
+                         <property name="toolTip">
+                          <string>Current block height.</string>
+                         </property>
+                         <property name="text">
+                          <string>Coin Price:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="1">
+                        <widget class="QLabel" name="labelCoinPrice">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Current block height.</string>
+                         </property>
+                         <property name="text">
+                          <string notr="true">1.000 USD</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+					   <item row="4" column="0">
+                        <widget class="QLabel" name="labelTotalCoinsText">
+                         <property name="toolTip">
+                          <string>All the coins in the blockchain</string>
+                         </property>
+                         <property name="text">
+                          <string>Total Coins:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="1">
+                        <widget class="QLabel" name="labelTotalCoins">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Total coins in the blockchain</string>
+                         </property>
+                         <property name="text">
+                          <string notr="true">0.000???000???00 ORO</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+					   <item row="5" column="0">
+                        <widget class="QLabel" name="labelIssuedCoinsText">
+                         <property name="toolTip">
+                          <string>All the coins in the market</string>
+                         </property>
+                         <property name="text">
+                          <string>Issued Coins:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="5" column="1">
+                        <widget class="QLabel" name="labelIssuedCoins">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>All the coins in the market</string>
+                         </property>
+                         <property name="text">
+                          <string notr="true">0.000???000???00 ORO</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="6" column="0">
+                        <widget class="QLabel" name="labelMarketCapText">
+                         <property name="toolTip">
+                          <string>MarketCap</string>
+                         </property>
+                         <property name="text">
+                          <string>Market Cap:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="6" column="1">
+                        <widget class="QLabel" name="labelMarketCap">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="cursor">
+                          <cursorShape>IBeamCursor</cursorShape>
+                         </property>
+                         <property name="toolTip">
+                          <string>Market Cap</string>
+                         </property>
+                         <property name="text">
+                          <string notr="true">0.000???000???00 USD</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                         </property>
+                         <property name="textInteractionFlags">
+                          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="2">
+                        <spacer name="horizontalSpacer_54">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <spacer name="verticalSpacer_54">
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>20</width>
+                         <height>40</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
                   <item>
                    <widget class="QFrame" name="frame_ZerocoinBalances">
                     <property name="frameShape">

@@ -127,6 +127,26 @@ CAmount WalletModel::getWatchImmatureBalance() const
     return wallet->GetImmatureWatchOnlyBalance();
 }
 
+CAmount WalletModel::getBlockReward(int64_t nBlockHeight) const
+{
+    return wallet->GetBlockReward(nBlockHeight);
+}
+
+CAmount WalletModel::getIssuedCoins() const
+{
+    return wallet->GetIssuedCoins();
+}
+
+CAmount WalletModel::getTotalCoins(int64_t nBlockHeight) const
+{
+    return wallet->GetTotalCoins(nBlockHeight);
+}
+
+CAmount WalletModel::getMarketCap() const
+{
+    return wallet->GetMarketCap();
+}
+
 void WalletModel::updateStatus()
 {
     EncryptionStatus newEncryptionStatus = getEncryptionStatus();
@@ -155,6 +175,7 @@ void WalletModel::pollBalanceChanged()
         cachedZeromintPercentage = nZeromintPercentage;
 
         checkBalanceChanged();
+        checkOROInfoChanged(cachedNumBlocks);
         if (transactionTableModel) {
             transactionTableModel->updateConfirmations();
         }
@@ -207,6 +228,14 @@ void WalletModel::checkBalanceChanged()
                             newZerocoinBalance, newUnconfirmedZerocoinBalance, newImmatureZerocoinBalance,
                             newWatchOnlyBalance, newWatchUnconfBalance, newWatchImmatureBalance);
     }
+}
+
+void WalletModel::checkOROInfoChanged(int64_t nHeight)
+{
+    // TODO: check with cached values
+    
+    emit oroInfoChanged(getBlockReward(nHeight), 0, 0,
+                        getTotalCoins(nHeight), getIssuedCoins(), getMarketCap());
 }
 
 void WalletModel::updateTransaction()

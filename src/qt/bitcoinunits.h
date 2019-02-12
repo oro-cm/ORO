@@ -14,6 +14,7 @@
 #include <QString>
 
 // U+2009 THIN SPACE = UTF-8 E2 80 89
+#define REAL_COMMA 0x002C
 #define REAL_THIN_SP_CP 0x2009
 #define REAL_THIN_SP_UTF8 "\xE2\x80\x89"
 #define REAL_THIN_SP_HTML "&thinsp;"
@@ -40,6 +41,7 @@
 #define HTML_HACK_SP "<span style='white-space: nowrap; font-size: 6pt'> </span>"
 
 // Define THIN_SP_* variables to be our preferred type of thin space
+#define COMMA   REAL_COMMA
 #define THIN_SP_CP REAL_THIN_SP_CP
 #define THIN_SP_UTF8 REAL_THIN_SP_UTF8
 #define THIN_SP_HTML HTML_HACK_SP
@@ -65,7 +67,8 @@ public:
     enum SeparatorStyle {
         separatorNever,
         separatorStandard,
-        separatorAlways
+        separatorAlways,
+        separatorComma
     };
 
     //! @name Static API
@@ -129,5 +132,84 @@ private:
     QList<BitcoinUnits::Unit> unitlist;
 };
 typedef BitcoinUnits::Unit BitcoinUnit;
+
+class USDUnits: public QAbstractListModel
+{
+    Q_OBJECT
+
+public:
+    explicit USDUnits(QObject *parent);
+
+    enum Unit
+    {
+        USD,
+        UScent
+    };
+
+    enum SeparatorStyle
+    {
+        separatorNever,
+        separatorStandard,
+        separatorAlways,
+		separatorComma
+    };
+
+    //! @name Static API
+    //! Unit conversion and formatting
+    ///@{
+
+    //! Get list of units, for drop-down box
+    static QList<Unit> availableUnits();
+    //! Is unit ID valid?
+    static bool valid(int unit);
+    //! Identifier, e.g. for image names
+    static QString id(int unit);
+    //! Short name
+    static QString name(int unit);
+    //! Longer description
+    static QString description(int unit);
+    //! Number of Satoshis (1e-8) per unit
+    static qint64 factor(int unit);
+    //! Number of decimals left
+    static int decimals(int unit);
+    //! Format as string
+    static QString format(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard, bool omitRemainderIfZero = false, bool forceOmitRemainder = false);
+    //! Format as string (with unit)
+    static QString formatWithUnit(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard, bool omitRemainderIfZero = false, bool forceOmitRemainder = false);
+    static QString formatHtmlWithUnit(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard);
+    //! Parse string to coin amount
+    static bool parse(int unit, const QString &value, CAmount *val_out);
+    //! Gets title for amount column including current display unit if optionsModel reference available */
+    static QString getAmountColumnTitle(int unit);
+    ///@}
+
+    //! @name AbstractListModel implementation
+    //! List model for unit drop-down selection box.
+    ///@{
+    enum RoleIndex {
+        /** Unit identifier */
+        UnitRole = Qt::UserRole
+    };
+    int rowCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    ///@}
+
+    static QString removeSpaces(QString text)
+    {
+        text.remove(' ');
+        text.remove(QChar(THIN_SP_CP));
+#if (THIN_SP_CP != REAL_THIN_SP_CP)
+        text.remove(QChar(REAL_THIN_SP_CP));
+#endif
+        return text;
+    }
+
+    //! Return maximum number of base units (Satoshis)
+    static CAmount maxMoney();
+
+private:
+    QList<USDUnits::Unit> unitlist;
+};
+typedef USDUnits::Unit USDUnit;
 
 #endif // BITCOIN_QT_BITCOINUNITS_H

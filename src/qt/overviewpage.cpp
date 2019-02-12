@@ -88,7 +88,7 @@ public:
             iconWatchonly.paint(painter, watchonlyRect);
         }
 
-        if(fConflicted) { // No need to check anything else for conflicted transactions
+        if (fConflicted) { // No need to check anything else for conflicted transactions
             foreground = COLOR_CONFLICTED;
         } else if (!confirmed || fImmature) {
             foreground = COLOR_UNCONFIRMED;
@@ -98,7 +98,7 @@ public:
             foreground = COLOR_BLACK;
         }
         painter->setPen(foreground);
-        QString amountText = BitcoinUnits::formatWithUnit(unit, amount, true, BitcoinUnits::separatorAlways);
+        QString amountText = BitcoinUnits::formatWithUnit(unit, amount, true, BitcoinUnits::separatorComma);
         if (!confirmed) {
             amountText = QString("[") + amountText + QString("]");
         }
@@ -163,6 +163,11 @@ OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
     ui->line_ZerocoinBalance->hide();
     ui->labelzOROPercent->hide();
 
+    m_nBlockHeight = 0;
+
+    networkManager = new QNetworkAccessManager(this);
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(setIssuedCoins(QNetworkReply*)));
+
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);
 }
@@ -183,28 +188,23 @@ void OverviewPage::getPercentage(CAmount nUnlockedBalance, CAmount nZerocoinBala
     int nPrecision = 2;
     double dzPercentage = 0.0;
 
-    if (nZerocoinBalance <= 0){
+    if (nZerocoinBalance <= 0) {
         dzPercentage = 0.0;
-    }
-    else{
-        if (nUnlockedBalance <= 0){
+    } else {
+        if (nUnlockedBalance <= 0) {
             dzPercentage = 100.0;
-        }
-        else{
+        } else {
             dzPercentage = 100.0 * (double)(nZerocoinBalance / (double)(nZerocoinBalance + nUnlockedBalance));
         }
     }
 
     double dPercentage = 100.0 - dzPercentage;
-    
+
     szOROPercentage = "(" + QLocale(QLocale::system()).toString(dzPercentage, 'f', nPrecision) + " %)";
     sOROPercentage = "(" + QLocale(QLocale::system()).toString(dPercentage, 'f', nPrecision) + " %)";
-    
 }
 
-void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, 
-                              const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
-                              const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance)
+void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance, const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance)
 {
     currentBalance = balance;
     currentUnconfirmedBalance = unconfirmedBalance;
@@ -225,7 +225,7 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     // ORO Balance
     CAmount nTotalBalance = balance + unconfirmedBalance + nLockedBalance;
     CAmount pivAvailableBalance = balance - immatureBalance;
-    CAmount nTotalWatchBalance = watchOnlyBalance + watchUnconfBalance + watchImmatureBalance;    
+    CAmount nTotalWatchBalance = watchOnlyBalance + watchUnconfBalance + watchImmatureBalance;
     CAmount nUnlockedBalance = nTotalBalance - nLockedBalance - nLockedBalance; // increment nLockedBalance twice because it was added to
                                                                                 // nTotalBalance above
     // zORO Balance
@@ -239,28 +239,28 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     CAmount sumTotalBalance = nTotalBalance + zerocoinBalance;
 
     // ORO labels
-    ui->labelBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, pivAvailableBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelUnconfirmed->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, unconfirmedBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelImmature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, immatureBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelLockedBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nLockedBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelTotal->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nTotalBalance, false, BitcoinUnits::separatorAlways));
+    ui->labelBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, pivAvailableBalance, false, BitcoinUnits::separatorComma));
+    ui->labelUnconfirmed->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, unconfirmedBalance, false, BitcoinUnits::separatorComma));
+    ui->labelImmature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, immatureBalance, false, BitcoinUnits::separatorComma));
+    ui->labelLockedBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nLockedBalance, false, BitcoinUnits::separatorComma));
+    ui->labelTotal->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nTotalBalance, false, BitcoinUnits::separatorComma));
 
     // Watchonly labels
-    ui->labelWatchAvailable->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, watchOnlyBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelWatchPending->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, watchUnconfBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelWatchImmature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, watchImmatureBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelWatchLocked->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nWatchOnlyLockedBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelWatchTotal->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nTotalWatchBalance, false, BitcoinUnits::separatorAlways));
+    ui->labelWatchAvailable->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, watchOnlyBalance, false, BitcoinUnits::separatorComma));
+    ui->labelWatchPending->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, watchUnconfBalance, false, BitcoinUnits::separatorComma));
+    ui->labelWatchImmature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, watchImmatureBalance, false, BitcoinUnits::separatorComma));
+    ui->labelWatchLocked->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nWatchOnlyLockedBalance, false, BitcoinUnits::separatorComma));
+    ui->labelWatchTotal->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nTotalWatchBalance, false, BitcoinUnits::separatorComma));
 
     // zORO labels
-    ui->labelzBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, zerocoinBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelzBalanceUnconfirmed->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, unconfirmedZerocoinBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelzBalanceMature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, matureZerocoinBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelzBalanceImmature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, immatureZerocoinBalance, false, BitcoinUnits::separatorAlways));
+    ui->labelzBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, zerocoinBalance, false, BitcoinUnits::separatorComma));
+    ui->labelzBalanceUnconfirmed->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, unconfirmedZerocoinBalance, false, BitcoinUnits::separatorComma));
+    ui->labelzBalanceMature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, matureZerocoinBalance, false, BitcoinUnits::separatorComma));
+    ui->labelzBalanceImmature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, immatureZerocoinBalance, false, BitcoinUnits::separatorComma));
 
     // Combined labels
-    ui->labelBalancez->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, availableTotalBalance, false, BitcoinUnits::separatorAlways));
-    ui->labelTotalz->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, sumTotalBalance, false, BitcoinUnits::separatorAlways));
+    ui->labelBalancez->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, availableTotalBalance, false, BitcoinUnits::separatorComma));
+    ui->labelTotalz->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, sumTotalBalance, false, BitcoinUnits::separatorComma));
 
     // Percentage labels
     ui->labelOROPercent->setText(sPercentage);
@@ -273,8 +273,7 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     if (fEnableZeromint) {
         automintHelp += tr("AutoMint is currently enabled and set to ") + QString::number(nZeromintPercentage) + "%.\n";
         automintHelp += tr("To disable AutoMint add 'enablezeromint=0' in oro.conf.");
-    }
-    else {
+    } else {
         automintHelp += tr("AutoMint is currently disabled.\nTo enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in oro.conf");
     }
 
@@ -314,7 +313,7 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     ui->labelzBalanceUnconfirmedText->setVisible(showzOROnconfirmed);
     ui->labelzBalanceImmature->setVisible(showzOROImmature);
     ui->labelzBalanceImmatureText->setVisible(showzOROImmature);
-    bool showPercentages = ! (zerocoinBalance == 0 && nTotalBalance == 0);
+    bool showPercentages = !(zerocoinBalance == 0 && nTotalBalance == 0);
     ui->labelOROPercent->setVisible(showPercentages);
     // ui->labelzOROPercent->setVisible(showPercentages);
 
@@ -333,7 +332,7 @@ void OverviewPage::updateWatchOnlyLabels(bool showWatchOnly)
     ui->labelWatchonly->setVisible(showWatchOnly);      // show watch-only label
     ui->labelWatchAvailable->setVisible(showWatchOnly); // show watch-only available balance
     ui->labelWatchPending->setVisible(showWatchOnly);   // show watch-only pending balance
-    ui->labelWatchLocked->setVisible(showWatchOnly);     // show watch-only total balance
+    ui->labelWatchLocked->setVisible(showWatchOnly);    // show watch-only total balance
     ui->labelWatchTotal->setVisible(showWatchOnly);     // show watch-only total balance
 
     if (!showWatchOnly) {
@@ -347,14 +346,57 @@ void OverviewPage::updateWatchOnlyLabels(bool showWatchOnly)
     }
 }
 
+void OverviewPage::setOROInfo(const CAmount& blockReward, const CAmount& coinPrice, const CAmount& targetPrice, const CAmount& totalCoins, const CAmount& issuedCoins, const CAmount& marketCap)
+{
+    int unit = walletModel->getOptionsModel()->getDisplayUnit();
+
+    // currentBlockReward = blockReward;
+    // currentTargetPrice = targetPrice;
+    // currentTotalCoins = totalCoins;
+    // currentIssuedCoins = issuedCoins;
+    // currentMarketCap = marketCap;
+
+    ui->labelBlockReward->setText(BitcoinUnits::formatWithUnit(unit, 1, false, BitcoinUnits::separatorComma));
+    ui->labelCoinPrice->setText(USDUnits::formatWithUnit(unit, 1000, false, USDUnits::separatorComma, false, false));
+    ui->labelTotalCoins->setText(BitcoinUnits::formatWithUnit(unit, totalCoins, false, BitcoinUnits::separatorComma));
+
+    QNetworkRequest request(QUrl("http://oro.cm/circulation/"));
+    currentReply = networkManager->get(request); // GET
+}
+
+void OverviewPage::setIssuedCoins(QNetworkReply* reply)
+{
+    if (reply->error() != QNetworkReply::NoError)
+        return; // ...only in a blog post
+
+    QByteArray data = reply->readAll();
+
+    bool ok;
+    int64_t issuedCoins = data.toLong(&ok, 10);
+    int unit = walletModel->getOptionsModel()->getDisplayUnit();
+    ui->labelIssuedCoins->setText(BitcoinUnits::formatWithUnit(unit, issuedCoins * 1000, false, BitcoinUnits::separatorComma));
+    ui->labelMarketCap->setText(USDUnits::formatWithUnit(unit, issuedCoins * 1000, false, USDUnits::separatorComma, true, true));
+}
+
+void OverviewPage::setNumBlocks(int count)
+{
+    CAmount blockNumber = count;
+    QString strBlockNumber = USDUnits::format(1, blockNumber * 10, false, USDUnits::separatorComma, true, true);
+    ui->labelBlockNumber->setText(strBlockNumber);
+}
+
 void OverviewPage::setClientModel(ClientModel* model)
 {
     this->clientModel = model;
+    setNumBlocks(model->getNumBlocks());
+    connect(model, SIGNAL(numBlocksChanged(int)), this, SLOT(setNumBlocks(int)));
+
     if (model) {
         // Show warning if this is a prerelease version
         connect(model, SIGNAL(alertsChanged(QString)), this, SLOT(updateAlerts(QString)));
         updateAlerts(model->getStatusBarWarnings());
     }
+    this->m_nBlockHeight = clientModel->getNumBlocks();
 }
 
 void OverviewPage::setWalletModel(WalletModel* model)
@@ -375,16 +417,19 @@ void OverviewPage::setWalletModel(WalletModel* model)
 
         // Keep up to date with wallet
         setBalance(model->getBalance(), model->getUnconfirmedBalance(), model->getImmatureBalance(),
-                   model->getZerocoinBalance(), model->getUnconfirmedZerocoinBalance(), model->getImmatureZerocoinBalance(), 
-                   model->getWatchBalance(), model->getWatchUnconfirmedBalance(), model->getWatchImmatureBalance());
-        connect(model, SIGNAL(balanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this, 
-                         SLOT(setBalance(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
+            model->getZerocoinBalance(), model->getUnconfirmedZerocoinBalance(), model->getImmatureZerocoinBalance(),
+            model->getWatchBalance(), model->getWatchUnconfirmedBalance(), model->getWatchImmatureBalance());
+        connect(model, SIGNAL(balanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this,
+            SLOT(setBalance(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
 
         connect(model->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
         connect(model->getOptionsModel(), SIGNAL(hideZeroBalancesChanged(bool)), this, SLOT(updateDisplayUnit()));
 
         updateWatchOnlyLabels(model->haveWatchOnly());
         connect(model, SIGNAL(notifyWatchonlyChanged(bool)), this, SLOT(updateWatchOnlyLabels(bool)));
+        setOROInfo(model->getBlockReward(m_nBlockHeight), 0, 0,
+            model->getTotalCoins(m_nBlockHeight), model->getIssuedCoins(), model->getMarketCap());
+        connect(model, SIGNAL(oroInfoChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this, SLOT(setOROInfo(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
     }
 
     // update the display unit, to not use the default ("ORO")

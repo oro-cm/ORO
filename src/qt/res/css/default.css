@@ -956,6 +956,11 @@ min-width:400px;
 background-color:#ffffff;
 }
 
+QWidget .QFrame#frame_NetStatus { /* Lower left side */
+    min-width:400px;
+    background-color:#ffffff;
+    }
+
 QWidget .QFrame#frame_CombinedBalances { /* Lower left side */
 min-width:400px;
 background-color:#ffffff;
@@ -1228,7 +1233,7 @@ font-size:12px;
 
 QWidget .QFrame#frame_CombinedBalances .QLabel#labelBalancez { /* Available HUZ Balance */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:24px;
+font-size:22px;
 font-weight:normal;
 color:#060314;
 }
@@ -1263,10 +1268,132 @@ font-size:12px;
 
 QWidget .QFrame#frame_CombinedBalances .QLabel#labelTotalz { /* Available total Balance */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:24px;
+font-size:22px;
 font-weight:normal;
 color:#060314;
 }
+
+/* Network Status additions start here ***********************************************/
+
+QWidget .QFrame#frame_NetStatus .QLabel#label_5z_NetStatus { /* Network Status Label */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    min-width:160px;
+    background-color:transparent;
+    color:#382F44;
+    font-weight:bold;
+    font-size:14px;
+    margin-right:5px;
+    padding-right:5px;
+    }
+    
+    QWidget .QFrame#frame_NetStatus .QLabel#labelBlockRewardText { /* Block Reward Label */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    min-width:160px;
+    color:#060314;
+    margin-right:5px;
+    padding-right:5px;
+    font-weight:bold;
+    font-size:12px;
+    }
+    
+    QWidget .QFrame#frame_NetStatus .QLabel#labelBlockReward { /* Block Reward */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    font-size:12px;
+    font-weight:bold;
+    color:#060314;
+    margin-left:0px;
+    }
+    
+    QWidget .QFrame#frame_NetStatus .QLabel#labelBlockNumberText { /* Block Number Label */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    min-width:160px;
+    color:#060314;
+    margin-right:5px;
+    padding-right:5px;
+    font-weight:bold;
+    font-size:12px;
+    }
+    
+    QWidget .QFrame#frame_NetStatus .QLabel#labelBlockNumber { /* Block Number Balance */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    font-size:12px;
+    font-weight:bold;
+    color:#060314;
+    margin-left:0px;
+    }
+
+    QWidget .QFrame#frame_NetStatus .QLabel#labelCoinPriceText { /* Coin Price */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    min-width:160px;
+    color:#060314;
+    margin-right:5px;
+    padding-right:5px;
+    font-weight:bold;
+    font-size:12px;
+    }
+    
+    QWidget .QFrame#frame_NetStatus .QLabel#labelCoinPrice { /* CoinPrice */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    font-size:12px;
+    font-weight:bold;
+    color:#060314;
+    margin-left:0px;
+    }
+    
+    QWidget .QFrame#frame_NetStatus .QLabel#labelTotalCoinsText { /* Total coins Label */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    min-width:160px;
+    color:#060314;
+    margin-right:5px;
+    padding-right:5px;
+    font-weight:bold;
+    font-size:12px;
+    }
+    
+    QWidget .QFrame#frame_NetStatus .QLabel#labelTotalCoins { /* Total coins */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    font-size:12px;
+    font-weight:bold;
+    color:#060314;
+    margin-left:0px;
+    }
+    
+    QWidget .QFrame#frame_NetStatus .QLabel#labelIssuedCoinsText { /* Issued Coins Label */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    min-width:160px;
+    color:#060314;
+    margin-right:5px;
+    padding-right:5px;
+    font-weight:bold;
+    font-size:12px;
+    }
+    
+    QWidget .QFrame#frame_NetStatus .QLabel#labelIssuedCoins { /* Issued Coins Balance */
+    qproperty-alignment: 'AlignVCenter | AlignLeft';
+    font-size:12px;
+    font-weight:bold;
+    color:#060314;
+    margin-left:0px;
+    }
+
+    QWidget .QFrame#frame_NetStatus .QLabel#labelMarketCapText { /* Market Cap Label */
+        qproperty-alignment: 'AlignVCenter | AlignLeft';
+        min-width:160px;
+        color:#060314;
+        margin-right:5px;
+        padding-right:5px;
+        font-weight:bold;
+        font-size:12px;
+        }
+        
+        QWidget .QFrame#frame_NetStatus .QLabel#labelMarketCap { /* Market Cap */
+        qproperty-alignment: 'AlignVCenter | AlignLeft';
+        font-size:12px;
+        font-weight:bold;
+        color:#060314;
+        margin-left:0px;
+        }
+    
 
 /**************************** RECENT TRANSACTIONS ***************************************/
 

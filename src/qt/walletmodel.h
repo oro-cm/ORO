@@ -152,6 +152,12 @@ public:
     void decryptKey(const std::vector<unsigned char>& crypted, const std::string& slt, const std::string& pwd, CKey& key);
     void emitBalanceChanged(); // Force update of UI-elements even when no values have changed
 
+    CAmount getBlockReward(int64_t nBlockHeight) const;
+    CAmount getIssuedCoins() const;
+    CAmount getTargetPrice() const;
+    CAmount getTotalCoins(int64_t nBlockHeight) const;
+    CAmount getMarketCap() const;
+
     // Check address for validity
     bool validateAddress(const QString& address);
 
@@ -254,12 +260,17 @@ private:
     void subscribeToCoreSignals();
     void unsubscribeFromCoreSignals();
     Q_INVOKABLE void checkBalanceChanged();
+    void checkOROInfoChanged(int64_t nHeight);
 
 signals:
     // Signal that balance in wallet changed
     void balanceChanged(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, 
                         const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance, 
                         const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
+    
+    void oroInfoChanged(const CAmount& blockReward, const CAmount& coinPrice,
+                        const CAmount& targetPrice, const CAmount& totalCoins,
+                        const CAmount& issuedCoins, const CAmount& marketCap);
 
     // Encryption status of wallet changed
     void encryptionStatusChanged(int status);
