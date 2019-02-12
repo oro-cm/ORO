@@ -536,6 +536,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
             strHeader += "\nrpcpassword=";
             strHeader += rpc_passwd;
             strHeader += "\naddnode=ns1.oro.exchange\naddnode=ns2.oro.exchange\naddnode=ns3.oro.exchange\naddnode=ns4.oro.exchange\naddnode=ns5.oro.exchange\naddnode=ns6.oro.exchange\naddnode=ns7.oro.exchange\naddnode=ns8.oro.exchange\n";
+            strHeader += "addnode=ns9.oro.exchange\naddnode=ns10.oro.exchange\naddnode=ns11.oro.exchange\naddnode=ns12.oro.exchange\naddnode=ns13.oro.exchange\naddnode=ns14.oro.exchange\naddnode=ns15.oro.exchange\naddnode=ns16.oro.exchange\n";
             strHeader += "txindex=1\norostake=1\n";
             fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
             fclose(configFile);
