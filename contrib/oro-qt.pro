@@ -268,8 +268,8 @@ HEADERS += src/activemasternode.h \
            src/qt/test/paymentservertests.h \
            src/qt/test/uritests.h \
            src/secp256k1/include/secp256k1.h \
-           src/secp256k1/src/ecdsa.h \
-           src/secp256k1/src/ecdsa_impl.h \
+           src/secp256k1/src/orosa.h \
+           src/secp256k1/src/orosa_impl.h \
            src/secp256k1/src/eckey.h \
            src/secp256k1/src/eckey_impl.h \
            src/secp256k1/src/ecmult.h \
@@ -658,3 +658,6 @@ TRANSLATIONS += src/qt/locale/oro_bg.ts \
                 src/qt/locale/oro_vi.ts \
                 src/qt/locale/oro_zh_CN.ts \
                 src/qt/locale/oro_zh_TW.ts
+
+DISTFILES += \
+    README.md

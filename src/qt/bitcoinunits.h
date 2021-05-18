@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The PIVX developers
-// Copyright (c) 2018-2019 The ORO developers
+// Copyright (c) 2015-2019 The ORO developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -14,10 +13,13 @@
 #include <QString>
 
 // U+2009 THIN SPACE = UTF-8 E2 80 89
-#define REAL_COMMA 0x002C
 #define REAL_THIN_SP_CP 0x2009
 #define REAL_THIN_SP_UTF8 "\xE2\x80\x89"
 #define REAL_THIN_SP_HTML "&thinsp;"
+
+#define COMMA_CP 0x2C
+#define COMMA_UTF8 "\x2C"
+#define COMMA_HTML "&#44;"
 
 // U+200A HAIR SPACE = UTF-8 E2 80 8A
 #define HAIR_SP_CP 0x200A
@@ -41,7 +43,6 @@
 #define HTML_HACK_SP "<span style='white-space: nowrap; font-size: 6pt'> </span>"
 
 // Define THIN_SP_* variables to be our preferred type of thin space
-#define COMMA   REAL_COMMA
 #define THIN_SP_CP REAL_THIN_SP_CP
 #define THIN_SP_UTF8 REAL_THIN_SP_UTF8
 #define THIN_SP_HTML HTML_HACK_SP
@@ -61,14 +62,14 @@ public:
      */
     enum Unit {
         ORO,
-        mORO
+        mORO,
+        uORO
     };
 
     enum SeparatorStyle {
         separatorNever,
         separatorStandard,
-        separatorAlways,
-        separatorComma
+        separatorAlways
     };
 
     //! @name Static API
@@ -82,7 +83,7 @@ public:
     //! Identifier, e.g. for image names
     static QString id(int unit);
     //! Short name
-    static QString name(int unit);
+    static QString name(int unit, bool isZoro = false);
     //! Longer description
     static QString description(int unit);
     //! Number of Satoshis (1e-8) per unit
@@ -90,14 +91,14 @@ public:
     //! Number of decimals left
     static int decimals(int unit);
     //! Format as string
-    static QString format(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard);
+    static QString format(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard, bool cleanRemainderZeros = true);
     static QString simpleFormat(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard);
     //! Format as string (with unit)
     static QString formatWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard);
     static QString formatHtmlWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard);
     //! Format as string (with unit) but floor value up to "digits" settings
-    static QString floorWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard);
-    static QString floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard);
+    static QString floorWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard, bool cleanRemainderZeros = false, bool isZORO = false);
+    static QString floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard, bool cleanRemainderZeros = false, bool isZORO = false);
     //! Parse string to coin amount
     static bool parse(int unit, const QString& value, CAmount* val_out);
     //! Gets title for amount column including current display unit if optionsModel reference available */
@@ -132,84 +133,5 @@ private:
     QList<BitcoinUnits::Unit> unitlist;
 };
 typedef BitcoinUnits::Unit BitcoinUnit;
-
-class USDUnits: public QAbstractListModel
-{
-    Q_OBJECT
-
-public:
-    explicit USDUnits(QObject *parent);
-
-    enum Unit
-    {
-        USD,
-        UScent
-    };
-
-    enum SeparatorStyle
-    {
-        separatorNever,
-        separatorStandard,
-        separatorAlways,
-		separatorComma
-    };
-
-    //! @name Static API
-    //! Unit conversion and formatting
-    ///@{
-
-    //! Get list of units, for drop-down box
-    static QList<Unit> availableUnits();
-    //! Is unit ID valid?
-    static bool valid(int unit);
-    //! Identifier, e.g. for image names
-    static QString id(int unit);
-    //! Short name
-    static QString name(int unit);
-    //! Longer description
-    static QString description(int unit);
-    //! Number of Satoshis (1e-8) per unit
-    static qint64 factor(int unit);
-    //! Number of decimals left
-    static int decimals(int unit);
-    //! Format as string
-    static QString format(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard, bool omitRemainderIfZero = false, bool forceOmitRemainder = false);
-    //! Format as string (with unit)
-    static QString formatWithUnit(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard, bool omitRemainderIfZero = false, bool forceOmitRemainder = false);
-    static QString formatHtmlWithUnit(int unit, const CAmount& amount, bool plussign=false, SeparatorStyle separators=separatorStandard);
-    //! Parse string to coin amount
-    static bool parse(int unit, const QString &value, CAmount *val_out);
-    //! Gets title for amount column including current display unit if optionsModel reference available */
-    static QString getAmountColumnTitle(int unit);
-    ///@}
-
-    //! @name AbstractListModel implementation
-    //! List model for unit drop-down selection box.
-    ///@{
-    enum RoleIndex {
-        /** Unit identifier */
-        UnitRole = Qt::UserRole
-    };
-    int rowCount(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    ///@}
-
-    static QString removeSpaces(QString text)
-    {
-        text.remove(' ');
-        text.remove(QChar(THIN_SP_CP));
-#if (THIN_SP_CP != REAL_THIN_SP_CP)
-        text.remove(QChar(REAL_THIN_SP_CP));
-#endif
-        return text;
-    }
-
-    //! Return maximum number of base units (Satoshis)
-    static CAmount maxMoney();
-
-private:
-    QList<USDUnits::Unit> unitlist;
-};
-typedef USDUnits::Unit USDUnit;
 
 #endif // BITCOIN_QT_BITCOINUNITS_H

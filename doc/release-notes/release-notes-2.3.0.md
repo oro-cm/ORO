@@ -151,7 +151,7 @@ git merge commit are mentioned.
 - #201 `f0e87b1` [RPC] Add active/incative flag to getstakingstatus RPC call (Mrs-X)
 
 ### Configuration and command-line options
-- #180 `16b8601` [Wallet] Add parameter interaction between -disablewallet and -orostake (Aaron Miller)
+- #180 `16b8601` [Wallet] Add parameter interaction between -disablewallet and -staking (Aaron Miller)
 - #208 `5f494c4` [Qt] Fix segfault when running with `-help` (Fuzzbawls)
 - #193 `ac7590b` [Output] Reformat help messages (Fuzzbawls)
 - #230 `aa47fa4` [Output] Update default value for -peerbloomfilters in help (Fuzzbawls)
@@ -182,7 +182,7 @@ git merge commit are mentioned.
 - #175 `8727f1c` [Docs] Reformat main README.md (Fuzzbawls)
 - #213 `ddd8994` [Trivial] Reduce debug.log spam for masternode messages (Fuzzbawls)
 
-Credits
+Oros
 =======
 
 Thanks to everyone who directly contributed to this release:

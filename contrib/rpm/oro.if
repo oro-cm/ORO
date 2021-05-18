@@ -1,0 +1,157 @@
+
+## <summary>policy for oro</summary>
+
+
+########################################
+## <summary>
+##	Transition to oro.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`oro_domtrans',`
+	gen_require(`
+		type oro_t, oro_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, oro_exec_t, oro_t)
+')
+
+
+########################################
+## <summary>
+##	Execute oro server in the oro domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`oro_initrc_domtrans',`
+	gen_require(`
+		type oro_initrc_exec_t;
+	')
+
+	init_labeled_script_domtrans($1, oro_initrc_exec_t)
+')
+
+
+########################################
+## <summary>
+##	Search oro lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`oro_search_lib',`
+	gen_require(`
+		type oro_var_lib_t;
+	')
+
+	allow $1 oro_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read oro lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`oro_read_lib_files',`
+	gen_require(`
+		type oro_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, oro_var_lib_t, oro_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage oro lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`oro_manage_lib_files',`
+	gen_require(`
+		type oro_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, oro_var_lib_t, oro_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage oro lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`oro_manage_lib_dirs',`
+	gen_require(`
+		type oro_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, oro_var_lib_t, oro_var_lib_t)
+')
+
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	a oro environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`oro_admin',`
+	gen_require(`
+		type oro_t;
+		type oro_initrc_exec_t;
+		type oro_var_lib_t;
+	')
+
+	allow $1 oro_t:process { ptrace signal_perms };
+	ps_process_pattern($1, oro_t)
+
+	oro_initrc_domtrans($1)
+	domain_system_change_exemption($1)
+	role_transition $2 oro_initrc_exec_t system_r;
+	allow $2 system_r;
+
+	files_search_var_lib($1)
+	admin_pattern($1, oro_var_lib_t)
+
+')
+

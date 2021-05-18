@@ -1,2 +1,2 @@
-debian/manpages/orod.1
-debian/manpages/oro.conf.5
+doc/man/orod.1
+doc/man/oro-cli.1

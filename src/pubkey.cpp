@@ -1,6 +1,5 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
-// Copyright (c) 2017-2018 The PIVX developers
-// Copyright (c) 2018-2019 The ORO developers
+// Copyright (c) 2017-2018 The ORO developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -16,7 +15,7 @@ secp256k1_context* secp256k1_context_verify = nullptr;
 } // namespace
 
 /** This function is taken from the libsecp256k1 distribution and implements
- *  DER parsing for ECDSA signatures, while supporting an arbitrary subset of
+ *  DER parsing for OROSA signatures, while supporting an arbitrary subset of
  *  format violations.
  *
  *  Supported violations include negative integers, excessive padding, garbage
@@ -25,7 +24,7 @@ secp256k1_context* secp256k1_context_verify = nullptr;
  *  strict DER before being passed to this module, and we know it supports all
  *  violations present in the blockchain before that point.
  */
-static int ecdsa_signature_parse_der_lax(const secp256k1_context* ctx, secp256k1_ecdsa_signature* sig, const unsigned char *input, size_t inputlen) {
+static int orosa_signature_parse_der_lax(const secp256k1_context* ctx, secp256k1_orosa_signature* sig, const unsigned char *input, size_t inputlen) {
     size_t rpos, rlen, spos, slen;
     size_t pos = 0;
     size_t lenbyte;
@@ -33,7 +32,7 @@ static int ecdsa_signature_parse_der_lax(const secp256k1_context* ctx, secp256k1
     int overflow = 0;
 
     /* Hack to initialize sig with a correctly-parsed but invalid signature. */
-    secp256k1_ecdsa_signature_parse_compact(ctx, sig, tmpsig);
+    secp256k1_orosa_signature_parse_compact(ctx, sig, tmpsig);
 
     /* Sequence tag byte */
     if (pos == inputlen || input[pos] != 0x30) {
@@ -156,13 +155,13 @@ static int ecdsa_signature_parse_der_lax(const secp256k1_context* ctx, secp256k1
     }
 
     if (!overflow) {
-        overflow = !secp256k1_ecdsa_signature_parse_compact(ctx, sig, tmpsig);
+        overflow = !secp256k1_orosa_signature_parse_compact(ctx, sig, tmpsig);
     }
     if (overflow) {
         /* Overwrite the result again with a correctly-parsed but invalid
            signature if parsing failed. */
         memset(tmpsig, 0, 64);
-        secp256k1_ecdsa_signature_parse_compact(ctx, sig, tmpsig);
+        secp256k1_orosa_signature_parse_compact(ctx, sig, tmpsig);
     }
     return 1;
 }
@@ -172,17 +171,17 @@ bool CPubKey::Verify(const uint256& hash, const std::vector<unsigned char>& vchS
     if (!IsValid())
         return false;
     secp256k1_pubkey pubkey;
-    secp256k1_ecdsa_signature sig;
+    secp256k1_orosa_signature sig;
     if (!secp256k1_ec_pubkey_parse(secp256k1_context_verify, &pubkey, &(*this)[0], size())) {
         return false;
     }
-    if (!ecdsa_signature_parse_der_lax(secp256k1_context_verify, &sig, vchSig.data(), vchSig.size())) {
+    if (!orosa_signature_parse_der_lax(secp256k1_context_verify, &sig, vchSig.data(), vchSig.size())) {
         return false;
     }
-    /* libsecp256k1's ECDSA verification requires lower-S signatures, which have
+    /* libsecp256k1's OROSA verification requires lower-S signatures, which have
      * not historically been enforced in Bitcoin, so normalize them first. */
-    secp256k1_ecdsa_signature_normalize(secp256k1_context_verify, &sig, &sig);
-    return secp256k1_ecdsa_verify(secp256k1_context_verify, &sig, hash.begin(), &pubkey);
+    secp256k1_orosa_signature_normalize(secp256k1_context_verify, &sig, &sig);
+    return secp256k1_orosa_verify(secp256k1_context_verify, &sig, hash.begin(), &pubkey);
 }
 
 bool CPubKey::RecoverCompact(const uint256& hash, const std::vector<unsigned char>& vchSig)
@@ -192,11 +191,11 @@ bool CPubKey::RecoverCompact(const uint256& hash, const std::vector<unsigned cha
     int recid = (vchSig[0] - 27) & 3;
     bool fComp = ((vchSig[0] - 27) & 4) != 0;
     secp256k1_pubkey pubkey;
-    secp256k1_ecdsa_recoverable_signature sig;
-    if (!secp256k1_ecdsa_recoverable_signature_parse_compact(secp256k1_context_verify, &sig, &vchSig[1], recid)) {
+    secp256k1_orosa_recoverable_signature sig;
+    if (!secp256k1_orosa_recoverable_signature_parse_compact(secp256k1_context_verify, &sig, &vchSig[1], recid)) {
         return false;
     }
-    if (!secp256k1_ecdsa_recover(secp256k1_context_verify, &pubkey, &sig, hash.begin())) {
+    if (!secp256k1_orosa_recover(secp256k1_context_verify, &pubkey, &sig, hash.begin())) {
         return false;
     }
     unsigned char pub[PUBLIC_KEY_SIZE];
@@ -281,11 +280,11 @@ bool CExtPubKey::Derive(CExtPubKey& out, unsigned int _nChild) const
 }
 
 /* static */ bool CPubKey::CheckLowS(const std::vector<unsigned char>& vchSig) {
-    secp256k1_ecdsa_signature sig;
-    if (!ecdsa_signature_parse_der_lax(secp256k1_context_verify, &sig, vchSig.data(), vchSig.size())) {
+    secp256k1_orosa_signature sig;
+    if (!orosa_signature_parse_der_lax(secp256k1_context_verify, &sig, vchSig.data(), vchSig.size())) {
         return false;
     }
-    return (!secp256k1_ecdsa_signature_normalize(secp256k1_context_verify, nullptr, &sig));
+    return (!secp256k1_orosa_signature_normalize(secp256k1_context_verify, nullptr, &sig));
 }
 
 /* static */ int ECCVerifyHandle::refcount = 0;

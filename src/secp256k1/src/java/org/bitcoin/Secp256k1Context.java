@@ -18,7 +18,7 @@ package org.bitcoin;
 
 /**
  * This class holds the context reference used in native methods 
- * to handle ECDSA operations.
+ * to handle OROSA operations.
  */
 public class Secp256k1Context {
   private static final boolean enabled; //true if the library is loaded

@@ -1,8 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2018 The PIVX developers
-// Copyright (c) 2018-2019 The ORO developers
+// Copyright (c) 2015-2019 The ORO developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -15,7 +14,6 @@
 #include "allocators.h"
 #include "chainparamsbase.h"
 #include "random.h"
-#include "serialize.h"
 #include "sync.h"
 #include "utilstrencodings.h"
 #include "utiltime.h"
@@ -23,10 +21,6 @@
 #include <stdarg.h>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <openssl/bio.h>
-#include <openssl/buffer.h>
-#include <openssl/crypto.h> // for OPENSSL_cleanse()
-#include <openssl/evp.h>
 
 
 #ifndef WIN32
@@ -83,7 +77,6 @@
 #include <boost/algorithm/string/predicate.hpp> // for startswith() and endswith()
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/foreach.hpp>
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/thread.hpp>
@@ -91,53 +84,37 @@
 #include <openssl/crypto.h>
 #include <openssl/rand.h>
 
-// Work around clang compilation problem in Boost 1.46:
-// /usr/include/boost/program_options/detail/config_file.hpp:163:17: error: call to function 'to_internal' that is neither visible in the template definition nor found by argument-dependent lookup
-// See also: http://stackoverflow.com/questions/10020179/compilation-fail-in-boost-librairies-program-options
-//           http://clang.debian.net/status.php?version=3.0&key=CANNOT_FIND_FUNCTION
-namespace boost
-{
-namespace program_options
-{
-std::string to_internal(const std::string&);
-}
-
-} // namespace boost
-
-using namespace std;
 
 // ORO only features
 // Masternode
 bool fMasterNode = false;
-string strMasterNodePrivKey = "";
-string strMasterNodeAddr = "";
+std::string strMasterNodePrivKey = "";
+std::string strMasterNodeAddr = "";
 bool fLiteMode = false;
 // SwiftX
 bool fEnableSwiftTX = true;
 int nSwiftTXDepth = 5;
 // Automatic Zerocoin minting
-bool fEnableZeromint = false;
+bool fEnableZeromint = true;
+bool fEnableAutoConvert = true;
 int nZeromintPercentage = 10;
 int nPreferredDenom = 0;
 const int64_t AUTOMINT_DELAY = (60 * 5); // Wait at least 5 minutes until Automint starts
 
-int nAnonymizeOroAmount = 1000;
-int nLiquidityProvider = 0;
 /** Spork enforcement enabled time */
 int64_t enforceMasternodePaymentsTime = 4085657524;
 bool fSucessfullyLoaded = false;
 /** All denominations used by obfuscation */
 std::vector<int64_t> obfuScationDenominations;
-string strBudgetMode = "";
+std::string strBudgetMode = "";
 
-map<string, string> mapArgs;
-map<string, vector<string> > mapMultiArgs;
+std::map<std::string, std::string> mapArgs;
+std::map<std::string, std::vector<std::string> > mapMultiArgs;
 bool fDebug = false;
 bool fPrintToConsole = false;
 bool fPrintToDebugLog = true;
 bool fDaemon = false;
-bool fServer = false;
-string strMiscWarning;
+std::string strMiscWarning;
 bool fLogTimestamps = false;
 bool fLogIPs = false;
 volatile bool fReopenDebugLog = false;
@@ -233,26 +210,28 @@ bool LogAcceptCategory(const char* category)
         // This helps prevent issues debugging global destructors,
         // where mapMultiArgs might be deleted before another
         // global destructor calls LogPrint()
-        static boost::thread_specific_ptr<set<string> > ptrCategory;
+        static boost::thread_specific_ptr<std::set<std::string> > ptrCategory;
         if (ptrCategory.get() == NULL) {
-            const vector<string>& categories = mapMultiArgs["-debug"];
-            ptrCategory.reset(new set<string>(categories.begin(), categories.end()));
+            const std::vector<std::string>& categories = mapMultiArgs["-debug"];
+            ptrCategory.reset(new std::set<std::string>(categories.begin(), categories.end()));
             // thread_specific_ptr automatically deletes the set when the thread ends.
             // "oro" is a composite category enabling all ORO-related debug output
-            if (ptrCategory->count(string("oro"))) {
-                ptrCategory->insert(string("obfuscation"));
-                ptrCategory->insert(string("swiftx"));
-                ptrCategory->insert(string("masternode"));
-                ptrCategory->insert(string("mnpayments"));
-                ptrCategory->insert(string("zero"));
-                ptrCategory->insert(string("mnbudget"));
+            if (ptrCategory->count(std::string("oro"))) {
+                ptrCategory->insert(std::string("obfuscation"));
+                ptrCategory->insert(std::string("swiftx"));
+                ptrCategory->insert(std::string("masternode"));
+                ptrCategory->insert(std::string("mnpayments"));
+                ptrCategory->insert(std::string("zero"));
+                ptrCategory->insert(std::string("mnbudget"));
+                ptrCategory->insert(std::string("precompute"));
+                ptrCategory->insert(std::string("staking"));
             }
         }
-        const set<string>& setCategories = *ptrCategory.get();
+        const std::set<std::string>& setCategories = *ptrCategory.get();
 
         // if not debugging everything and not debugging specific category, LogPrint does nothing.
-        if (setCategories.count(string("")) == 0 &&
-            setCategories.count(string(category)) == 0)
+        if (setCategories.count(std::string("")) == 0 &&
+            setCategories.count(std::string(category)) == 0)
             return false;
     }
     return true;
@@ -307,7 +286,7 @@ static bool InterpretBool(const std::string& strValue)
 /** Turn -noX into -X=0 */
 static void InterpretNegativeSetting(std::string& strKey, std::string& strValue)
 {
-    if (strKey.length() > 3 && strKey[0] == '-' && strKey[1] == 'n' && strKey[2] == 'o') {
+    if (strKey.length()>3 && strKey[0]=='-' && strKey[1]=='n' && strKey[2]=='o') {
         strKey = "-" + strKey.substr(3);
         strValue = InterpretBool(strValue) ? "0" : "1";
     }
@@ -387,20 +366,18 @@ static const int screenWidth = 79;
 static const int optIndent = 2;
 static const int msgIndent = 7;
 
-std::string HelpMessageGroup(const std::string& message)
-{
+std::string HelpMessageGroup(const std::string &message) {
     return std::string(message) + std::string("\n\n");
 }
 
-std::string HelpMessageOpt(const std::string& option, const std::string& message)
-{
-    return std::string(optIndent, ' ') + std::string(option) +
-           std::string("\n") + std::string(msgIndent, ' ') +
+std::string HelpMessageOpt(const std::string &option, const std::string &message) {
+    return std::string(optIndent,' ') + std::string(option) +
+           std::string("\n") + std::string(msgIndent,' ') +
            FormatParagraph(message, screenWidth - msgIndent, msgIndent) +
            std::string("\n\n");
 }
 
-static std::string FormatException(std::exception* pex, const char* pszThread)
+static std::string FormatException(const std::exception* pex, const char* pszThread)
 {
 #ifdef WIN32
     char pszModule[MAX_PATH] = "";
@@ -416,7 +393,7 @@ static std::string FormatException(std::exception* pex, const char* pszThread)
             "UNKNOWN EXCEPTION       \n%s in %s       \n", pszModule, pszThread);
 }
 
-void PrintExceptionContinue(std::exception* pex, const char* pszThread)
+void PrintExceptionContinue(const std::exception* pex, const char* pszThread)
 {
     std::string message = FormatException(pex, pszThread);
     LogPrintf("\n\n************************\n%s\n", message);
@@ -509,12 +486,13 @@ boost::filesystem::path GetMasternodeConfigFile()
     return pathConfigFile;
 }
 
-void ReadConfigFile(map<string, string>& mapSettingsRet,
-    map<string, vector<string> >& mapMultiSettingsRet)
+void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet,
+    std::map<std::string, std::vector<std::string> >& mapMultiSettingsRet)
 {
     boost::filesystem::ifstream streamConfig(GetConfigFile());
+    
     if (!streamConfig.good()) {
-        // Create empty oro.conf if it does not exist
+        // Create empty domo.conf if it does not exist
         FILE* configFile = fopen(GetConfigFile().string().c_str(), "a");
         if (configFile != NULL) {
             unsigned char rand_pwd[32];
@@ -535,9 +513,11 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
             strHeader += rpc_user;
             strHeader += "\nrpcpassword=";
             strHeader += rpc_passwd;
-            strHeader += "\naddnode=ns1.oro.exchange\naddnode=ns2.oro.exchange\naddnode=ns3.oro.exchange\naddnode=ns4.oro.exchange\naddnode=ns5.oro.exchange\naddnode=ns6.oro.exchange\naddnode=ns7.oro.exchange\naddnode=ns8.oro.exchange\n";
-            strHeader += "addnode=ns9.oro.exchange\naddnode=ns10.oro.exchange\naddnode=ns11.oro.exchange\naddnode=ns12.oro.exchange\naddnode=ns13.oro.exchange\naddnode=ns14.oro.exchange\naddnode=ns15.oro.exchange\naddnode=ns16.oro.exchange\n";
-            strHeader += "txindex=1\norostake=1\n";
+            strHeader += "\naddnode=140.82.1.62:41001\naddnode=8.9.11.29:41001\naddnode=45.63.21.249:41001\naddnode=208.167.245.211:41001\naddnode=173.199.123.237:41001\naddnode=207.246.83.212:41001\n";
+            strHeader += "\naddnode=explorer.oro.exchange:41001\naddnode=ns1.oro.exchange:41001\naddnode=ns2.oro.exchange:41001\naddnode=ns3.oro.exchange:41001\naddnode=ns4.oro.exchange:41001\naddnode=ns5.oro.exchange:41001\naddnode=ns6.oro.exchange:41001\n";
+            strHeader += "addnode=ns7.oro.exchange:41001\naddnode=ns8.oro.exchange:41001\naddnode=ns9.oro.exchange:41001\naddnode=ns10.oro.exchange:41001\naddnode=ns11.oro.exchange:41001\naddnode=ns12.oro.exchange:41001\n";
+            strHeader += "addnode=ns13.oro.exchange:41001\naddnode=ns14.oro.exchange:41001\naddnode=ns15.oro.exchange:41001\naddnode=ns16.oro.exchange:41001\n";
+            strHeader += "daemon=1\nserver=1\n";
             fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
             fclose(configFile);
         }
@@ -545,13 +525,13 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
         streamConfig.open(GetConfigFile());
     }
 
-    set<string> setOptions;
+    std::set<std::string> setOptions;
     setOptions.insert("*");
 
     for (boost::program_options::detail::config_file_iterator it(streamConfig, setOptions), end; it != end; ++it) {
         // Don't overwrite existing settings so command line settings override oro.conf
-        string strKey = string("-") + it->string_key;
-        string strValue = it->value[0];
+        std::string strKey = std::string("-") + it->string_key;
+        std::string strValue = it->value[0];
         InterpretNegativeSetting(strKey, strValue);
         if (mapSettingsRet.count(strKey) == 0)
             mapSettingsRet[strKey] = strValue;
@@ -599,7 +579,7 @@ bool TryCreateDirectory(const boost::filesystem::path& p)
 {
     try {
         return boost::filesystem::create_directory(p);
-    } catch (boost::filesystem::filesystem_error) {
+    } catch (const boost::filesystem::filesystem_error&) {
         if (!boost::filesystem::exists(p) || !boost::filesystem::is_directory(p))
             throw;
     }
@@ -714,12 +694,12 @@ void ShrinkDebugFile()
         // Restart the file with some of the end
         std::vector<char> vch(200000, 0);
         fseek(file, -((long)vch.size()), SEEK_END);
-        int nBytes = fread(begin_ptr(vch), 1, vch.size(), file);
+        int nBytes = fread(vch.data(), 1, vch.size(), file);
         fclose(file);
 
         file = fopen(pathLog.string().c_str(), "w");
         if (file) {
-            fwrite(begin_ptr(vch), 1, nBytes, file);
+            fwrite(vch.data(), 1, nBytes, file);
             fclose(file);
         }
     } else if (file != NULL)
@@ -840,8 +820,8 @@ bool SetupNetworking()
 #ifdef WIN32
     // Initialize Windows Sockets
     WSADATA wsadata;
-    int ret = WSAStartup(MAKEWORD(2, 2), &wsadata);
-    if (ret != NO_ERROR || LOBYTE(wsadata.wVersion) != 2 || HIBYTE(wsadata.wVersion) != 2)
+    int ret = WSAStartup(MAKEWORD(2,2), &wsadata);
+    if (ret != NO_ERROR || LOBYTE(wsadata.wVersion ) != 2 || HIBYTE(wsadata.wVersion) != 2)
         return false;
 #endif
     return true;

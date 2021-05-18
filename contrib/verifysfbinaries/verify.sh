@@ -69,7 +69,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #then we check it
-GPGOUT=$(gpg --yes --decrypt --output "$TMPFILE" "$SIGNATUREFILENAME" 2>&1)
+GOROUT=$(gpg --yes --decrypt --output "$TMPFILE" "$SIGNATUREFILENAME" 2>&1)
 
 #return value 0: good signature
 #return value 1: bad signature
@@ -86,7 +86,7 @@ if [ $RET -ne 0 ]; then
    fi
 
    echo "gpg output:"
-   echo "$GPGOUT"|sed 's/^/\t/g'
+   echo "$GOROUT"|sed 's/^/\t/g'
    clean_up $SIGNATUREFILENAME $TMPFILE
    exit "$RET"
 fi

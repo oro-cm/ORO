@@ -13,6 +13,7 @@ QT_TS = \
   qt/locale/oro_da.ts \
   qt/locale/oro_de.ts \
   qt/locale/oro_en.ts \
+  qt/locale/oro_en_GB.ts \
   qt/locale/oro_en_US.ts \
   qt/locale/oro_eo.ts \
   qt/locale/oro_es.ts \
@@ -43,82 +44,164 @@ QT_TS = \
 QT_FORMS_UI = \
   qt/forms/addressbookpage.ui \
   qt/forms/askpassphrasedialog.ui \
-  qt/forms/bip38tooldialog.ui \
   qt/forms/coincontroldialog.ui \
   qt/forms/blockexplorer.ui \
-  qt/forms/obfuscationconfig.ui \
   qt/forms/editaddressdialog.ui \
+  qt/forms/governancepage.ui \
   qt/forms/helpmessagedialog.ui \
   qt/forms/intro.ui \
-  qt/forms/masternodelist.ui \
-  qt/forms/multisenddialog.ui \
-  qt/forms/multisigdialog.ui\
   qt/forms/openuridialog.ui \
   qt/forms/optionsdialog.ui \
-  qt/forms/overviewpage.ui \
-  qt/forms/receivecoinsdialog.ui \
-  qt/forms/privacydialog.ui \
-  qt/forms/receiverequestdialog.ui \
   qt/forms/rpcconsole.ui \
-  qt/forms/sendcoinsdialog.ui \
-  qt/forms/sendcoinsentry.ui \
-  qt/forms/signverifymessagedialog.ui \
-  qt/forms/transactiondescdialog.ui \
-  qt/forms/zpivcontroldialog.ui
+  qt/oro/forms/loadingdialog.ui \
+  qt/forms/zorocontroldialog.ui \
+  qt/oro/forms/snackbar.ui \
+  qt/oro/forms/navmenuwidget.ui \
+  qt/oro/forms/lockunlock.ui \
+  qt/oro/forms/expandablebutton.ui \
+  qt/oro/forms/receivedialog.ui \
+  qt/oro/forms/walletpassworddialog.ui \
+  qt/oro/forms/topbar.ui \
+  qt/oro/forms/txrow.ui \
+  qt/oro/forms/dashboardwidget.ui \
+  qt/oro/forms/coincontrolorowidget.ui \
+  qt/oro/forms/addresslabelrow.ui \
+  qt/oro/forms/contactdropdownrow.ui \
+  qt/oro/forms/mninfodialog.ui \
+  qt/oro/forms/optionbutton.ui \
+  qt/oro/forms/masternodewizarddialog.ui \
+  qt/oro/forms/mnrow.ui \
+  qt/oro/forms/masternodeswidget.ui \
+  qt/oro/forms/myaddressrow.ui \
+  qt/oro/forms/csrow.ui \
+  qt/oro/forms/sendchangeaddressdialog.ui \
+  qt/oro/forms/sendconfirmdialog.ui \
+  qt/oro/forms/sendcustomfeedialog.ui \
+  qt/oro/forms/sendchangeaddressdialog.ui \
+  qt/oro/forms/sendmultirow.ui \
+  qt/oro/forms/send.ui \
+  qt/oro/forms/addnewaddressdialog.ui \
+  qt/oro/forms/addnewcontactdialog.ui \
+  qt/oro/forms/requestdialog.ui \
+  qt/oro/forms/receivewidget.ui \
+  qt/oro/forms/tooltipmenu.ui \
+  qt/oro/forms/addresseswidget.ui \
+  qt/oro/forms/defaultdialog.ui \
+  qt/oro/forms/denomgenerationdialog.ui \
+  qt/oro/forms/privacywidget.ui \
+  qt/oro/forms/coldstakingwidget.ui \
+  qt/oro/settings/forms/settingsbackupwallet.ui \
+  qt/oro/settings/forms/settingsbittoolwidget.ui \
+  qt/oro/settings/forms/settingsconsolewidget.ui \
+  qt/oro/settings/forms/settingsdisplayoptionswidget.ui \
+  qt/oro/settings/forms/settingsfaqwidget.ui \
+  qt/oro/settings/forms/settingsinformationwidget.ui \
+  qt/oro/settings/forms/settingsmainoptionswidget.ui \
+  qt/oro/settings/forms/settingsmultisenddialog.ui \
+  qt/oro/settings/forms/settingsmultisendwidget.ui \
+  qt/oro/settings/forms/settingssignmessagewidgets.ui \
+  qt/oro/settings/forms/settingswalletoptionswidget.ui \
+  qt/oro/settings/forms/settingswalletrepairwidget.ui \
+  qt/oro/settings/forms/settingswidget.ui \
+  qt/oro/forms/welcomecontentwidget.ui \
+  qt/oro/forms/splash.ui
 
 QT_MOC_CPP = \
   qt/moc_addressbookpage.cpp \
   qt/moc_addresstablemodel.cpp \
   qt/moc_askpassphrasedialog.cpp \
   qt/moc_bantablemodel.cpp \
-  qt/moc_bip38tooldialog.cpp \
   qt/moc_bitcoinaddressvalidator.cpp \
   qt/moc_bitcoinamountfield.cpp \
-  qt/moc_bitcoingui.cpp \
+  qt/oro/moc_orogui.cpp \
   qt/moc_bitcoinunits.cpp \
   qt/moc_blockexplorer.cpp \
   qt/moc_clientmodel.cpp \
   qt/moc_coincontroldialog.cpp \
   qt/moc_coincontroltreewidget.cpp \
   qt/moc_csvmodelwriter.cpp \
-  qt/moc_obfuscationconfig.cpp \
   qt/moc_editaddressdialog.cpp \
+  qt/moc_governancepage.cpp \
   qt/moc_guiutil.cpp \
   qt/moc_intro.cpp \
   qt/moc_macdockiconhandler.cpp \
   qt/moc_macnotificationhandler.cpp \
-  qt/moc_masternodelist.cpp \
-  qt/moc_multisenddialog.cpp \
-  qt/moc_multisigdialog.cpp\
   qt/moc_notificator.cpp \
   qt/moc_openuridialog.cpp \
   qt/moc_optionsdialog.cpp \
   qt/moc_optionsmodel.cpp \
-  qt/moc_overviewpage.cpp \
   qt/moc_peertablemodel.cpp \
   qt/moc_paymentserver.cpp \
   qt/moc_qvalidatedlineedit.cpp \
   qt/moc_qvaluecombobox.cpp \
-  qt/moc_receivecoinsdialog.cpp \
-  qt/moc_privacydialog.cpp \
-  qt/moc_receiverequestdialog.cpp \
+  qt/moc_proposalframe.cpp \
   qt/moc_recentrequeststablemodel.cpp \
   qt/moc_rpcconsole.cpp \
-  qt/moc_sendcoinsdialog.cpp \
-  qt/moc_sendcoinsentry.cpp \
-  qt/moc_signverifymessagedialog.cpp \
   qt/moc_splashscreen.cpp \
   qt/moc_trafficgraphwidget.cpp \
   qt/moc_transactiondesc.cpp \
-  qt/moc_transactiondescdialog.cpp \
   qt/moc_transactionfilterproxy.cpp \
   qt/moc_transactiontablemodel.cpp \
-  qt/moc_transactionview.cpp \
   qt/moc_utilitydialog.cpp \
-  qt/moc_walletframe.cpp \
   qt/moc_walletmodel.cpp \
-  qt/moc_walletview.cpp \
-  qt/moc_zpivcontroldialog.cpp
+  qt/oro/moc_loadingdialog.cpp \
+  qt/moc_zorocontroldialog.cpp \
+  qt/oro/moc_pwidget.cpp \
+  qt/oro/moc_snackbar.cpp \
+  qt/oro/moc_navmenuwidget.cpp \
+  qt/oro/moc_lockunlock.cpp \
+  qt/oro/moc_expandablebutton.cpp \
+  qt/oro/moc_furabstractlistitemdelegate.cpp \
+  qt/oro/moc_receivedialog.cpp \
+  qt/oro/moc_walletpassworddialog.cpp \
+  qt/oro/moc_pfborderimage.cpp \
+  qt/oro/moc_topbar.cpp \
+  qt/oro/moc_txrow.cpp \
+  qt/oro/moc_dashboardwidget.cpp \
+  qt/oro/moc_coincontrolorowidget.cpp \
+  qt/oro/moc_addresslabelrow.cpp \
+  qt/oro/moc_contactdropdownrow.cpp \
+  qt/oro/moc_mninfodialog.cpp \
+  qt/oro/moc_optionbutton.cpp \
+  qt/oro/moc_coldstakingmodel.cpp \
+  qt/oro/moc_mnmodel.cpp \
+  qt/oro/moc_masternodewizarddialog.cpp \
+  qt/oro/moc_mnrow.cpp \
+  qt/oro/moc_masternodeswidget.cpp \
+  qt/oro/moc_myaddressrow.cpp \
+  qt/oro/moc_csrow.cpp \
+  qt/oro/moc_contactsdropdown.cpp \
+  qt/oro/moc_sendchangeaddressdialog.cpp \
+  qt/oro/moc_sendconfirmdialog.cpp \
+  qt/oro/moc_sendcustomfeedialog.cpp \
+  qt/oro/moc_sendchangeaddressdialog.cpp \
+  qt/oro/moc_sendmultirow.cpp \
+  qt/oro/moc_send.cpp \
+  qt/oro/moc_addnewaddressdialog.cpp \
+  qt/oro/moc_addnewcontactdialog.cpp \
+  qt/oro/moc_requestdialog.cpp \
+  qt/oro/moc_receivewidget.cpp \
+  qt/oro/moc_tooltipmenu.cpp \
+  qt/oro/moc_addresseswidget.cpp \
+  qt/oro/moc_defaultdialog.cpp \
+  qt/oro/moc_denomgenerationdialog.cpp \
+  qt/oro/moc_privacywidget.cpp \
+  qt/oro/moc_coldstakingwidget.cpp \
+  qt/oro/settings/moc_settingsbackupwallet.cpp \
+  qt/oro/settings/moc_settingsbittoolwidget.cpp \
+  qt/oro/settings/moc_settingsconsolewidget.cpp \
+  qt/oro/settings/moc_settingsdisplayoptionswidget.cpp \
+  qt/oro/settings/moc_settingsfaqwidget.cpp \
+  qt/oro/settings/moc_settingsinformationwidget.cpp \
+  qt/oro/settings/moc_settingsmainoptionswidget.cpp \
+  qt/oro/settings/moc_settingsmultisenddialog.cpp \
+  qt/oro/settings/moc_settingsmultisendwidget.cpp \
+  qt/oro/settings/moc_settingssignmessagewidgets.cpp \
+  qt/oro/settings/moc_settingswalletoptionswidget.cpp \
+  qt/oro/settings/moc_settingswalletrepairwidget.cpp \
+  qt/oro/settings/moc_settingswidget.cpp \
+  qt/oro/moc_welcomecontentwidget.cpp \
+  qt/oro/moc_splash.cpp
 
 BITCOIN_MM = \
   qt/macdockiconhandler.mm \
@@ -128,8 +211,8 @@ QT_MOC = \
   qt/oro.moc \
   qt/bitcoinamountfield.moc \
   qt/intro.moc \
-  qt/overviewpage.moc \
-  qt/rpcconsole.moc
+  qt/rpcconsole.moc \
+  qt/oro/settings/moc_settingsconsolewidget.cpp
 
 QT_QRC_CPP = qt/qrc_oro.cpp
 QT_QRC = qt/oro.qrc
@@ -145,61 +228,111 @@ BITCOIN_QT_H = \
   qt/addresstablemodel.h \
   qt/askpassphrasedialog.h \
   qt/bantablemodel.h \
-  qt/bip38tooldialog.h \
   qt/bitcoinaddressvalidator.h \
   qt/bitcoinamountfield.h \
-  qt/bitcoingui.h \
+  qt/oro/orogui.h \
   qt/bitcoinunits.h \
   qt/blockexplorer.h \
   qt/clientmodel.h \
   qt/coincontroldialog.h \
   qt/coincontroltreewidget.h \
   qt/csvmodelwriter.h \
-  qt/obfuscationconfig.h \
   qt/editaddressdialog.h \
+  qt/governancepage.h \
   qt/guiconstants.h \
   qt/guiutil.h \
   qt/intro.h \
   qt/macdockiconhandler.h \
   qt/macnotificationhandler.h \
-  qt/masternodelist.h \
-  qt/multisenddialog.h \
-  qt/multisigdialog.h\
   qt/networkstyle.h \
   qt/notificator.h \
   qt/openuridialog.h \
   qt/optionsdialog.h \
   qt/optionsmodel.h \
-  qt/overviewpage.h \
   qt/paymentrequestplus.h \
   qt/paymentserver.h \
   qt/peertablemodel.h \
   qt/platformstyle.h \
+  qt/proposalframe.h \
   qt/qvalidatedlineedit.h \
   qt/qvaluecombobox.h \
-  qt/receivecoinsdialog.h \
-  qt/privacydialog.h \
-  qt/receiverequestdialog.h \
   qt/recentrequeststablemodel.h \
   qt/rpcconsole.h \
-  qt/sendcoinsdialog.h \
-  qt/sendcoinsentry.h \
-  qt/signverifymessagedialog.h \
   qt/splashscreen.h \
   qt/trafficgraphwidget.h \
   qt/transactiondesc.h \
-  qt/transactiondescdialog.h \
   qt/transactionfilterproxy.h \
   qt/transactionrecord.h \
   qt/transactiontablemodel.h \
-  qt/transactionview.h \
   qt/utilitydialog.h \
-  qt/walletframe.h \
   qt/walletmodel.h \
   qt/walletmodeltransaction.h \
-  qt/walletview.h \
+  qt/oro/prunnable.h \
+  qt/oro/pfborderimage.h \
+  qt/oro/loadingdialog.h \
   qt/winshutdownmonitor.h \
-  qt/zpivcontroldialog.h
+  qt/zorocontroldialog.h \
+  qt/oro/pwidget.h \
+  qt/oro/guitransactionsutils.h \
+  qt/oro/snackbar.h \
+  qt/oro/navmenuwidget.h \
+  qt/oro/lockunlock.h \
+  qt/oro/receivedialog.h \
+  qt/oro/furlistrow.h \
+  qt/oro/furabstractlistitemdelegate.h \
+  qt/oro/txviewholder.h \
+  qt/oro/qtutils.h \
+  qt/oro/expandablebutton.h \
+  qt/oro/walletpassworddialog.h \
+  qt/oro/topbar.h \
+  qt/oro/txrow.h \
+  qt/oro/addressholder.h \
+  qt/oro/addressfilterproxymodel.h \
+  qt/oro/dashboardwidget.h \
+  qt/oro/coincontrolorowidget.h \
+  qt/oro/addresslabelrow.h \
+  qt/oro/contactdropdownrow.h \
+  qt/oro/mninfodialog.h \
+  qt/oro/optionbutton.h \
+  qt/oro/coldstakingmodel.h \
+  qt/oro/mnmodel.h \
+  qt/oro/masternodewizarddialog.h \
+  qt/oro/mnrow.h \
+  qt/oro/masternodeswidget.h \
+  qt/oro/myaddressrow.h \
+  qt/oro/csrow.h \
+  qt/oro/contactsdropdown.h \
+  qt/oro/sendchangeaddressdialog.h \
+  qt/oro/sendconfirmdialog.h \
+  qt/oro/sendcustomfeedialog.h \
+  qt/oro/sendchangeaddressdialog.h \
+  qt/oro/sendmultirow.h \
+  qt/oro/send.h \
+  qt/oro/addnewaddressdialog.h \
+  qt/oro/addnewcontactdialog.h \
+  qt/oro/requestdialog.h \
+  qt/oro/receivewidget.h \
+  qt/oro/tooltipmenu.h \
+  qt/oro/addresseswidget.h \
+  qt/oro/defaultdialog.h \
+  qt/oro/denomgenerationdialog.h \
+  qt/oro/privacywidget.h \
+  qt/oro/coldstakingwidget.h \
+  qt/oro/settings/settingsbackupwallet.h \
+  qt/oro/settings/settingsbittoolwidget.h \
+  qt/oro/settings/settingsconsolewidget.h \
+  qt/oro/settings/settingsdisplayoptionswidget.h \
+  qt/oro/settings/settingsfaqwidget.h \
+  qt/oro/settings/settingsinformationwidget.h \
+  qt/oro/settings/settingsmainoptionswidget.h \
+  qt/oro/settings/settingsmultisenddialog.h \
+  qt/oro/settings/settingsmultisendwidget.h \
+  qt/oro/settings/settingssignmessagewidgets.h \
+  qt/oro/settings/settingswalletoptionswidget.h \
+  qt/oro/settings/settingswalletrepairwidget.h \
+  qt/oro/settings/settingswidget.h \
+  qt/oro/welcomecontentwidget.h \
+  qt/oro/splash.h
 
 RES_ICONS = \
   qt/res/icons/add.png \
@@ -210,6 +343,7 @@ RES_ICONS = \
   qt/res/icons/bitcoin.png \
   qt/res/icons/bitcoin_testnet.ico \
   qt/res/icons/bitcoin_testnet.png \
+  qt/res/icons/bitcoin_regtest.png \
   qt/res/icons/browse.png \
   qt/res/icons/clock1.png \
   qt/res/icons/clock2.png \
@@ -247,6 +381,8 @@ RES_ICONS = \
   qt/res/icons/remove.png \
   qt/res/icons/send.png \
   qt/res/icons/send_dark.png \
+  qt/res/icons/governance.png \
+  qt/res/icons/governance_dark.png \
   qt/res/icons/staking_active.png \
   qt/res/icons/staking_inactive.png \
   qt/res/icons/synced.png \
@@ -258,25 +394,236 @@ RES_ICONS = \
   qt/res/icons/tx_input.png \
   qt/res/icons/tx_output.png \
   qt/res/icons/tx_mined.png \
+  qt/res/icons/ic-transaction-received.svg \
+  qt/res/icons/ic-transaction-mint.svg \
+  qt/res/icons/ic-transaction-sent.svg \
+  qt/res/icons/ic-transaction-staked.svg \
   qt/res/icons/unit_oro.png \
   qt/res/icons/unit_moro.png \
   qt/res/icons/unit_uoro.png \
   qt/res/icons/unit_toro.png \
   qt/res/icons/unit_tmoro.png \
-  qt/res/icons/unit_tuoro.png
+  qt/res/icons/unit_tuoro.png \
+  qt/res/icons/yesvote.png \
+  qt/res/icons/novote.png \
+  qt/res/icons/abstainvote.png \
+  qt/oro/res/img/bg-dashboard-banner.png \
+  qt/oro/res/img/bg-multi-number-dark.svg \
+  qt/oro/res/img/ic-check-locked.svg \
+  qt/oro/res/img/ic-nav-address.svg \
+  qt/oro/res/img/ic-update.svg \
+  qt/oro/res/img/bg-multi-number.svg \
+  qt/oro/res/img/ic-check-mint-off.svg \
+  qt/oro/res/img/ic-nav-cold-staking.svg \
+  qt/oro/res/img/ic-nav-cold-staking-active.svg \
+  qt/oro/res/img/ic-nav-dashboard-active.svg \
+  qt/oro/res/img/ic-wallet-status-locked.svg \
+  qt/oro/res/img/bg-splash.svg \
+  qt/oro/res/img/bg-splash.png \
+  qt/oro/res/img/ic-check-mint.svg \
+  qt/oro/res/img/ic-nav-dashboard-hover.svg \
+  qt/oro/res/img/ic-wallet-status-staking.svg \
+  qt/oro/res/img/ic-check-peers-off.svg \
+  qt/oro/res/img/ic-nav-dashboard.svg \
+  qt/oro/res/img/ic-wallet-status-unlocked.svg \
+  qt/oro/res/img/ic-check-peers.svg \
+  qt/oro/res/img/ic-nav-master-active.svg \
+  qt/oro/res/img/ic-watch-password-white.svg \
+  qt/oro/res/img/bg-welcome-container.jpg \
+  qt/oro/res/img/bg-welcome-container.png \
+  qt/oro/res/img/bg-welcome-container.svg \
+  qt/oro/res/img/bg-welcome-container@2x.png \
+  qt/oro/res/img/bg-welcome-container@3x.png \
+  qt/oro/res/img/ic-check-staking-off.svg \
+  qt/oro/res/img/ic-nav-master-hover.svg \
+  qt/oro/res/img/ic-watch-password.svg \
+  qt/oro/res/img/bg-welcome.jpg \
+  qt/oro/res/img/bg-welcome.svg \
+  qt/oro/res/img/bg-welcome@2x.jpg \
+  qt/oro/res/img/bg-welcome@3x.jpg \
+  qt/oro/res/img/bg-welcome.png \
+  qt/oro/res/img/ic-check-staking.svg \
+  qt/oro/res/img/ic-nav-master.svg \
+  qt/oro/res/img/img-dashboard-banner.jpg \
+  qt/oro/res/img/btn-radio-active.svg \
+  qt/oro/res/img/ic-check-sync-off.svg \
+  qt/oro/res/img/ic-nav-privacy-active.svg \
+  qt/oro/res/img/img-empty-contacts.svg \
+  qt/oro/res/img/btn-radio-off.svg \
+  qt/oro/res/img/ic-check-sync.png \
+  qt/oro/res/img/ic-nav-privacy-hover.svg \
+  qt/oro/res/img/img-empty-dark-contacts.svg \
+  qt/oro/res/img/ic-contact-arrow-down.svg \
+  qt/oro/res/img/ic-contact-arrow-down-white.svg \
+  qt/oro/res/img/ic-check-sync.svg \
+  qt/oro/res/img/ic-check-faq.svg \
+  qt/oro/res/img/ic-nav-privacy.svg \
+  qt/oro/res/img/img-empty-dark-error.svg \
+  qt/oro/res/img/ic-add-label.svg \
+  qt/oro/res/img/ic-pending.svg \
+  qt/oro/res/img/ic-check-theme-dark.svg \
+  qt/oro/res/img/ic-nav-receive-active.svg \
+  qt/oro/res/img/img-empty-dark-masternode.svg \
+  qt/oro/res/img/ic-add-liliac.svg \
+  qt/oro/res/img/ic-check-theme-light.svg \
+  qt/oro/res/img/ic-nav-receive-hover.svg \
+  qt/oro/res/img/img-empty-dark-multisend.svg \
+  qt/oro/res/img/ic-add-purple.svg \
+  qt/oro/res/img/ic-check-white.svg \
+  qt/oro/res/img/ic-nav-receive.svg \
+  qt/oro/res/img/img-empty-dark-peers.svg \
+  qt/oro/res/img/ic-add.svg \
+  qt/oro/res/img/ic-check.svg \
+  qt/oro/res/img/ic-nav-send-active.svg \
+  qt/oro/res/img/img-empty-dark-staking-off.svg \
+  qt/oro/res/img/img-empty-dark-staking-on.svg \
+  qt/oro/res/img/ic-address-book-grey.svg \
+  qt/oro/res/img/ic-chevron-left.svg \
+  qt/oro/res/img/ic-nav-send-hover.svg \
+  qt/oro/res/img/img-empty-dark-transactions.svg \
+  qt/oro/res/img/ic-address-book-white.svg \
+  qt/oro/res/img/ic-chevron-right.svg \
+  qt/oro/res/img/ic-nav-send.svg \
+  qt/oro/res/img/img-empty-error.svg \
+  qt/oro/res/img/ic-address-book.svg \
+  qt/oro/res/img/ic-clear-liliac.svg \
+  qt/oro/res/img/ic-nav-settings-active.svg \
+  qt/oro/res/img/img-empty-masternode.svg \
+  qt/oro/res/img/ic-address-send-white.svg \
+  qt/oro/res/img/ic-clear-purple.svg \
+  qt/oro/res/img/ic-nav-settings-hover.svg \
+  qt/oro/res/img/img-empty-multisend.svg \
+  qt/oro/res/img/ic-address-send.svg \
+  qt/oro/res/img/ic-close-white.svg \
+  qt/oro/res/img/ic-nav-settings.svg \
+  qt/oro/res/img/img-empty-peers.svg \
+  qt/oro/res/img/img-empty-privacy.svg \
+  qt/oro/res/img/img-empty-privacy-dark.svg \
+  qt/oro/res/img/ic-arrow-drop-down-white.svg \
+  qt/oro/res/img/ic-close.svg \
+  qt/oro/res/img/ic-radio-liliac-on.svg \
+  qt/oro/res/img/img-empty-staking-off.svg \
+  qt/oro/res/img/ic-arrow-drop-down.svg \
+  qt/oro/res/img/ic-coin-oro.svg \
+  qt/oro/res/img/ic-receive-off.svg \
+  qt/oro/res/img/img-empty-staking-on.svg \
+  qt/oro/res/img/ic-arrow-drop-up-white.svg \
+  qt/oro/res/img/ic-coin-zoro.png \
+  qt/oro/res/img/ic-receive-on.svg \
+  qt/oro/res/img/img-empty-transactions.svg \
+  qt/oro/res/img/ic-arrow-drop-up.svg \
+  qt/oro/res/img/ic-coin-zoro.svg \
+  qt/oro/res/img/ic-received.svg \
+  qt/oro/res/img/img-logo-oro.png \
+  qt/oro/res/img/ic-arrow-drop-white-down.svg \
+  qt/oro/res/img/ic-combo-box.svg \
+  qt/oro/res/img/ic-send.svg \
+  qt/oro/res/img/img-logo-oro@2x.png \
+  qt/oro/res/img/ic-arrow-purple-down.svg \
+  qt/oro/res/img/ic-connect.svg \
+  qt/oro/res/img/ic-submenu-lock.svg \
+  qt/oro/res/img/img-logo-oro@3x.png \
+  qt/oro/res/img/img-logo-oro.png \
+  qt/oro/res/img/ic-arrow-right-white.svg \
+  qt/oro/res/img/ic-arrow-left-white.svg \
+  qt/oro/res/img/ic-arrow-left.svg \
+  qt/oro/res/img/ic-copy-liliac.svg \
+  qt/oro/res/img/ic-submenu-staking.svg \
+  qt/oro/res/img/img-nav-logo-oro.png \
+  qt/oro/res/img/ic-arrow-right.svg \
+  qt/oro/res/img/ic-copy.svg \
+  qt/oro/res/img/ic-copy-big.svg \
+  qt/oro/res/img/ic-copy-big-white.svg \
+  qt/oro/res/img/ic-submenu-unlock.svg \
+  qt/oro/res/img/img-nav-logo.png \
+  qt/oro/res/img/ic-arrow-white-left.svg \
+  qt/oro/res/img/ic-exit.svg \
+  qt/oro/res/img/ic-switch-liliac-on.svg \
+  qt/oro/res/img/img-nav-logo.svg \
+  qt/oro/res/img/ic-arrow-white-right.svg \
+  qt/oro/res/img/ic-expand.svg \
+  qt/oro/res/img/ic-switch-off.svg \
+  qt/oro/res/img/img-qr-test-big.png \
+  qt/oro/res/img/ic-check-active.svg \
+  qt/oro/res/img/ic-folder.svg \
+  qt/oro/res/img/ic-switch-on.svg \
+  qt/oro/res/img/img-qr-test.png \
+  qt/oro/res/img/ic-check-box.svg \
+  qt/oro/res/img/ic-check-box-dark-active.svg \
+  qt/oro/res/img/ic-check-box-indeterminate.svg \
+  qt/oro/res/img/ic-check-box-liliac-indeterminate.svg \
+  qt/oro/res/img/ic-label-liliac.svg \
+  qt/oro/res/img/ic-transaction-warning.svg \
+  qt/oro/res/img/ic-transaction-mint.svg \
+  qt/oro/res/img/ic-transaction-mint-inactive.svg \
+  qt/oro/res/img/ic-check-cold-staking.svg \
+  qt/oro/res/img/ic-check-cold-staking-off.svg \
+  qt/oro/res/img/ic-check-cold-staking-enabled.svg \
+  qt/oro/res/img/dark/ic-transaction-cs-contract.svg \
+  qt/oro/res/img/dark/ic-transaction-cs-contract-inactive.svg \
+  qt/oro/res/img/img-qr.svg \
+  qt/oro/res/img/ic-check-connect-off.svg \
+  qt/oro/res/img/ic-label.svg \
+  qt/oro/res/img/ic-transaction-received.svg \
+  qt/oro/res/img/dark/ic-transaction-received.svg \
+  qt/oro/res/img/dark/ic-transaction-warning.svg \
+  qt/oro/res/img/dark/ic-transaction-mint.svg \
+  qt/oro/res/img/dark/ic-transaction-mint-inactive.svg \
+  qt/oro/res/img/ic-transaction-received-inactive.svg \
+  qt/oro/res/img/dark/ic-transaction-received-inactive.svg \
+  qt/oro/res/img/img-welcome-step1.png \
+  qt/oro/res/img/ic-check-connect.svg \
+  qt/oro/res/img/ic-menu-hover.svg \
+  qt/oro/res/img/ic-transaction-sent.svg \
+  qt/oro/res/img/ic-transaction-sent-inactive.svg \
+  qt/oro/res/img/dark/ic-transaction-sent.svg \
+  qt/oro/res/img/dark/ic-transaction-sent-inactive.svg \
+  qt/oro/res/img/img-welcome-step2.png \
+  qt/oro/res/img/ic-check-dark.svg \
+  qt/oro/res/img/ic-mint.svg \
+  qt/oro/res/img/ic-transaction-staked.svg \
+  qt/oro/res/img/ic-transaction-staked-inactive.svg \
+  qt/oro/res/img/dark/ic-transaction-staked.svg \
+  qt/oro/res/img/dark/ic-transaction-staked-inactive.svg \
+  qt/oro/res/img/img-welcome-step3.png \
+  qt/oro/res/img/ic-check-liliac-on.svg \
+  qt/oro/res/img/ic-nav-address-active.svg \
+  qt/oro/res/img/ic-unlock-staking.svg \
+  qt/oro/res/img/img-welcome-step4.png \
+  qt/oro/res/img/ic-check-locked-off.svg \
+  qt/oro/res/img/ic-nav-address-hover.svg \
+  qt/oro/res/img/ic-update-liliac.svg \
+  qt/oro/res/img/ic-arrow-drop-down-purple.svg \
+  qt/oro/res/img/ic-arrow-drop-up-purple.svg \
+  qt/oro/res/img/ic-check-liliac-indeterminate.svg \
+  qt/oro/res/img/ic-check-box-liliac-indeterminate.svg \
+  qt/oro/res/img/ic-transaction-stake-delegated.svg \
+  qt/oro/res/img/ic-transaction-stake-delegated-inactive.svg \
+  qt/oro/res/img/ic-transaction-stake-hot.svg \
+  qt/oro/res/img/ic-transaction-stake-hot-inactive.svg \
+  qt/oro/res/img/dark/ic-transaction-stake-hot.svg \
+  qt/oro/res/img/dark/ic-transaction-stake-hot-inactive.svg \
+  qt/oro/res/img/dark/ic-transaction-stake-delegated.svg \
+  qt/oro/res/img/dark/ic-transaction-stake-delegated-inactive.svg \
+  qt/oro/res/img/ic-transaction-cs-contract.svg \
+  qt/oro/res/img/ic-transaction-cs-contract-inactive.svg \
+  qt/oro/res/img/ic-check-box-indeterminate.svg \
+  qt/oro/res/img/ani-loading-dark.gif \
+  qt/oro/res/img/ani-loading.gif
 
-BITCOIN_QT_CPP = \
+
+
+BITCOIN_QT_BASE_CPP = \
   qt/bantablemodel.cpp \
   qt/bitcoinaddressvalidator.cpp \
   qt/bitcoinamountfield.cpp \
-  qt/bitcoingui.cpp \
+  qt/oro/orogui.cpp \
   qt/bitcoinunits.cpp \
   qt/blockexplorer.cpp \
   qt/clientmodel.cpp \
   qt/csvmodelwriter.cpp \
   qt/guiutil.cpp \
   qt/intro.cpp \
-  qt/masternodelist.cpp \
   qt/networkstyle.cpp \
   qt/notificator.cpp \
   qt/optionsdialog.cpp \
@@ -290,53 +637,105 @@ BITCOIN_QT_CPP = \
   qt/trafficgraphwidget.cpp \
   qt/utilitydialog.cpp
 
-if TARGET_WINDOWS
-BITCOIN_QT_CPP += qt/winshutdownmonitor.cpp
-endif
+BITCOIN_QT_WINDOWS_CPP = qt/winshutdownmonitor.cpp
 
-if ENABLE_WALLET
-BITCOIN_QT_CPP += \
+BITCOIN_QT_WALLET_CPP = \
   qt/addressbookpage.cpp \
   qt/addresstablemodel.cpp \
   qt/askpassphrasedialog.cpp \
-  qt/bip38tooldialog.cpp \
   qt/blockexplorer.cpp \
   qt/coincontroldialog.cpp \
   qt/coincontroltreewidget.cpp \
-  qt/obfuscationconfig.cpp \
   qt/editaddressdialog.cpp \
-  qt/masternodelist.cpp \
-  qt/multisenddialog.cpp \
-  qt/multisigdialog.cpp\
+  qt/governancepage.cpp \
   qt/openuridialog.cpp \
-  qt/overviewpage.cpp \
   qt/paymentrequestplus.cpp \
   qt/paymentserver.cpp \
-  qt/receivecoinsdialog.cpp \
-  qt/privacydialog.cpp \
-  qt/receiverequestdialog.cpp \
+  qt/proposalframe.cpp \
   qt/recentrequeststablemodel.cpp \
-  qt/sendcoinsdialog.cpp \
-  qt/sendcoinsentry.cpp \
-  qt/signverifymessagedialog.cpp \
   qt/transactiondesc.cpp \
-  qt/transactiondescdialog.cpp \
   qt/transactionfilterproxy.cpp \
   qt/transactionrecord.cpp \
   qt/transactiontablemodel.cpp \
-  qt/transactionview.cpp \
-  qt/walletframe.cpp \
   qt/walletmodel.cpp \
   qt/walletmodeltransaction.cpp \
-  qt/walletview.cpp \
-  qt/zpivcontroldialog.cpp
+  qt/oro/loadingdialog.cpp \
+  qt/zorocontroldialog.cpp \
+  qt/oro/pwidget.cpp \
+  qt/oro/guitransactionsutils.cpp \
+  qt/oro/snackbar.cpp \
+  qt/oro/navmenuwidget.cpp \
+  qt/oro/lockunlock.cpp \
+  qt/oro/receivedialog.cpp \
+  qt/oro/furabstractlistitemdelegate.cpp \
+  qt/oro/txviewholder.cpp \
+  qt/oro/qtutils.cpp \
+  qt/oro/expandablebutton.cpp \
+  qt/oro/walletpassworddialog.cpp \
+  qt/oro/topbar.cpp \
+  qt/oro/txrow.cpp \
+  qt/oro/addressholder.cpp \
+  qt/oro/addressfilterproxymodel.cpp \
+  qt/oro/dashboardwidget.cpp \
+  qt/oro/coincontrolorowidget.cpp \
+  qt/oro/addresslabelrow.cpp \
+  qt/oro/contactdropdownrow.cpp \
+  qt/oro/contactsdropdown.cpp \
+  qt/oro/optionbutton.cpp \
+  qt/oro/mninfodialog.cpp \
+  qt/oro/coldstakingmodel.cpp \
+  qt/oro/mnmodel.cpp \
+  qt/oro/masternodewizarddialog.cpp \
+  qt/oro/mnrow.cpp \
+  qt/oro/masternodeswidget.cpp \
+  qt/oro/myaddressrow.cpp \
+  qt/oro/csrow.cpp \
+  qt/oro/sendchangeaddressdialog.cpp \
+  qt/oro/sendconfirmdialog.cpp \
+  qt/oro/sendcustomfeedialog.cpp \
+  qt/oro/sendchangeaddressdialog.cpp \
+  qt/oro/sendmultirow.cpp \
+  qt/oro/send.cpp \
+  qt/oro/addnewaddressdialog.cpp \
+  qt/oro/addnewcontactdialog.cpp \
+  qt/oro/requestdialog.cpp \
+  qt/oro/receivewidget.cpp \
+  qt/oro/tooltipmenu.cpp \
+  qt/oro/addresseswidget.cpp \
+  qt/oro/defaultdialog.cpp \
+  qt/oro/denomgenerationdialog.cpp \
+  qt/oro/privacywidget.cpp \
+  qt/oro/coldstakingwidget.cpp \
+  qt/oro/settings/settingsbackupwallet.cpp \
+  qt/oro/settings/settingsbittoolwidget.cpp \
+  qt/oro/settings/settingsconsolewidget.cpp \
+  qt/oro/settings/settingsdisplayoptionswidget.cpp \
+  qt/oro/settings/settingsfaqwidget.cpp \
+  qt/oro/settings/settingsinformationwidget.cpp \
+  qt/oro/settings/settingsmainoptionswidget.cpp \
+  qt/oro/settings/settingsmultisenddialog.cpp \
+  qt/oro/settings/settingsmultisendwidget.cpp \
+  qt/oro/settings/settingssignmessagewidgets.cpp \
+  qt/oro/settings/settingswalletoptionswidget.cpp \
+  qt/oro/settings/settingswalletrepairwidget.cpp \
+  qt/oro/settings/settingswidget.cpp \
+  qt/oro/welcomecontentwidget.cpp \
+  qt/oro/splash.cpp
 
+
+BITCOIN_QT_CPP = $(BITCOIN_QT_BASE_CPP)
+if TARGET_WINDOWS
+BITCOIN_QT_CPP += $(BITCOIN_QT_WINDOWS_CPP)
+endif
+if ENABLE_WALLET
+BITCOIN_QT_CPP += $(BITCOIN_QT_WALLET_CPP)
 endif
 
 RES_IMAGES = \
   qt/res/images/about.png \
   qt/res/images/splash.png \
   qt/res/images/splash_testnet.png \
+  qt/res/images/splash_regtest.png \
   qt/res/images/oro_logo_horizontal.png \
   qt/res/images/downArrow_dark.png \
   qt/res/images/downArrow_small_dark.png \
@@ -345,13 +744,12 @@ RES_IMAGES = \
   qt/res/images/upArrow_small.png \
   qt/res/images/leftArrow_small_dark.png \
   qt/res/images/rightArrow_small_dark.png \
-  qt/res/images/qtreeview_selected.png \
-  qt/res/images/walletFrame.png \
-  qt/res/images/walletFrame_bg.png \
-  qt/res/images/walletFrame_bg.png
+  qt/res/images/qtreeview_selected.png
 
 RES_CSS = \
-  qt/res/css/default.css
+  qt/res/css/default.css \
+  qt/oro/res/css/style_dark.css \
+  qt/oro/res/css/style_light.css
 
 RES_MOVIES = $(wildcard $(srcdir)/qt/res/movies/spinner-*.png)
 
@@ -361,7 +759,7 @@ BITCOIN_QT_INCLUDES = -I$(builddir)/qt -I$(srcdir)/qt -I$(srcdir)/qt/forms \
   -I$(builddir)/qt/forms
 
 qt_libbitcoinqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
-  $(QT_INCLUDES) $(QT_DBUS_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS)
+  $(QT_INCLUDES) $(QT_DBUS_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS) $(SVG_CFLAGS) $(CHARTS_CFLAGS)
 qt_libbitcoinqt_a_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 qt_libbitcoinqt_a_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) $(QT_PIE_FLAGS)
 
@@ -386,9 +784,8 @@ $(QT_MOC_CPP): $(PROTOBUF_H)
 
 # oro-qt binary #
 qt_oro_qt_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
-  $(QT_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS)
+  $(QT_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS) $(SVG_CFLAGS) $(CHARTS_CFLAGS)
 qt_oro_qt_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
-qt_bitcoin_qt_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 
 qt_oro_qt_SOURCES = qt/oro.cpp
 if TARGET_DARWIN
@@ -399,16 +796,16 @@ if TARGET_WINDOWS
 endif
 qt_oro_qt_LDADD = qt/libbitcoinqt.a $(LIBBITCOIN_SERVER)
 if ENABLE_WALLET
-qt_oro_qt_LDADD += $(LIBBITCOIN_WALLET)
+qt_oro_qt_LDADD += $(LIBBITCOIN_UTIL) $(LIBBITCOIN_WALLET)
 endif
 if ENABLE_ZMQ
 qt_oro_qt_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 endif
-qt_oro_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBBITCOIN_ZEROCOIN) $(LIBLEVELDB) $(LIBMEMENV) \
-  $(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(PROTOBUF_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBSECP256K1) \
+qt_oro_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBBITCOIN_ZEROCOIN) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) \
+  $(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(PROTOBUF_LIBS) $(SVG_LIBS) $(CHARTS_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBSECP256K1) \
   $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS)
 qt_oro_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
-qt_oro_qt_LIBTOOLFLAGS = --tag CXX
+qt_oro_qt_LIBTOOLFLAGS = $(AM_LIBTOOLFLAGS) --tag CXX
 
 #locale/foo.ts -> locale/foo.qm
 QT_QM=$(QT_TS:.ts=.qm)
@@ -419,7 +816,7 @@ $(srcdir)/qt/orostrings.cpp: $(libbitcoin_server_a_SOURCES) $(libbitcoin_wallet_
 	@test -n $(XGETTEXT) || echo "xgettext is required for updating translations"
 	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) PACKAGE_NAME="$(PACKAGE_NAME)" $(PYTHON) ../share/qt/extract_strings_qt.py $^
 
-translate: $(srcdir)/qt/orostrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
+translate: $(srcdir)/qt/orostrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_BASE_CPP) qt/oro.cpp $(BITCOIN_QT_WINDOWS_CPP) $(BITCOIN_QT_WALLET_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
 	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -locations relative -no-obsolete -ts $(srcdir)/qt/locale/oro_en.ts
 

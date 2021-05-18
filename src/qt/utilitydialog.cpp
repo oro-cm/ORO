@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The PIVX developers
-// Copyright (c) 2018-2019 The ORO developers
+// Copyright (c) 2015-2019 The ORO developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -9,11 +8,12 @@
 
 #include "ui_helpmessagedialog.h"
 
-#include "bitcoingui.h"
 #include "clientmodel.h"
 #include "guiconstants.h"
 #include "intro.h"
 #include "guiutil.h"
+
+#include "qt/oro/qtutils.cpp"
 
 #include "clientversion.h"
 #include "init.h"
@@ -33,6 +33,7 @@ HelpMessageDialog::HelpMessageDialog(QWidget* parent, bool about) : QDialog(pare
                                                                     ui(new Ui::HelpMessageDialog)
 {
     ui->setupUi(this);
+    if (parent) this->setStyleSheet(parent->styleSheet());
     GUIUtil::restoreWindowGeometry("nHelpMessageDialogWindow", this->size(), this);
 
     QString version = tr("ORO Core") + " " + tr("version") + " " + QString::fromStdString(FormatFullVersion());
@@ -45,6 +46,8 @@ HelpMessageDialog::HelpMessageDialog(QWidget* parent, bool about) : QDialog(pare
     version += " " + tr("(%1-bit)").arg(32);
 #endif
 
+    setCssBtnPrimary(ui->pushButtonOk);
+    connect(ui->pushButtonOk, &QPushButton::clicked, this, &HelpMessageDialog::close);
     if (about) {
         setWindowTitle(tr("About ORO Core"));
 
@@ -55,7 +58,7 @@ HelpMessageDialog::HelpMessageDialog(QWidget* parent, bool about) : QDialog(pare
         // Make URLs clickable
         QRegExp uri("<(.*)>", Qt::CaseSensitive, QRegExp::RegExp2);
         uri.setMinimal(true); // use non-greedy matching
-        licenseInfoHTML.replace(uri, "<a href=\"\\1\">\\1</a>");
+        licenseInfoHTML.replace(uri, "<a style='color: #88edff;text-decoration:none'  href=\"\\1\">\\1</a>");
         // Replace newlines with HTML breaks
         licenseInfoHTML.replace("\n\n", "<br><br>");
 
@@ -144,11 +147,6 @@ void HelpMessageDialog::showOrPrint()
 #endif
 }
 
-void HelpMessageDialog::on_okButton_accepted()
-{
-    close();
-}
-
 
 /** "Shutdown" window */
 ShutdownWindow::ShutdownWindow(QWidget* parent, Qt::WindowFlags f) : QWidget(parent, f)
@@ -160,7 +158,7 @@ ShutdownWindow::ShutdownWindow(QWidget* parent, Qt::WindowFlags f) : QWidget(par
     setLayout(layout);
 }
 
-void ShutdownWindow::showShutdownWindow(BitcoinGUI* window)
+void ShutdownWindow::showShutdownWindow(QMainWindow* window)
 {
     if (!window)
         return;

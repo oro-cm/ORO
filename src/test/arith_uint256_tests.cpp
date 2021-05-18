@@ -1,6 +1,5 @@
 // Copyright (c) 2011-2013 The Bitcoin Core developers
-// Copyright (c) 2017 The PIVX developers
-// Copyright (c) 2018-2019 The ORO developers
+// Copyright (c) 2017-2019 The ORO developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -14,9 +13,9 @@
 #include "arith_uint256.h"
 #include <string>
 #include "version.h"
+#include "test/test_oro.h"
 
-BOOST_AUTO_TEST_SUITE(arith_uint256_tests)
-///BOOST_FIXTURE_TEST_SUITE(arith_uint256_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(arith_uint256_tests, BasicTestingSetup)
 
 /// Convert vector to arith_uint256, via uint256 blob
 inline arith_uint256 arith_uint256V(const std::vector<unsigned char>& vch)
@@ -69,7 +68,7 @@ std::string ArrayToString(const unsigned char A[], unsigned int width)
 BOOST_AUTO_TEST_CASE( basics ) // constructors, equality, inequality
 {
     BOOST_CHECK(1 == 0+1);
-    // constructor arith_uint256(vector<char>):
+    // constructor arith_uint256(std::vector<char>):
     BOOST_CHECK(R1L.ToString() == ArrayToString(R1Array,32));
     BOOST_CHECK(R2L.ToString() == ArrayToString(R2Array,32));
     BOOST_CHECK(ZeroL.ToString() == ArrayToString(ZeroArray,32));
@@ -355,7 +354,7 @@ BOOST_AUTO_TEST_CASE( multiply )
 BOOST_AUTO_TEST_CASE( divide )
 {
     arith_uint256 D1L("AD7133AC1977FA2B7");
-    arith_uint256 D2L("ECD751716");
+    arith_uint256 D2L("ORO751716");
     BOOST_CHECK((R1L / D1L).ToString() == "00000000000000000b8ac01106981635d9ed112290f8895545a7654dde28fb3a");
     BOOST_CHECK((R1L / D2L).ToString() == "000000000873ce8efec5b67150bad3aa8c5fcb70e947586153bf2cec7c37c57a");
     BOOST_CHECK(R1L / OneL == R1L);

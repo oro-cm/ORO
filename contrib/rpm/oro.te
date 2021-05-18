@@ -1,0 +1,81 @@
+policy_module(oro, 1.100.1)
+
+########################################
+#
+# Declarations
+#
+
+type oro_t;
+type oro_exec_t;
+init_daemon_domain(oro_t, oro_exec_t)
+
+permissive oro_t;
+
+type oro_initrc_exec_t;
+init_script_file(oro_initrc_exec_t)
+
+type oro_conf_t;
+files_type(oro_conf_t)
+
+type oro_var_lib_t;
+files_type(oro_var_lib_t)
+
+type oro_var_run_t;
+files_type(oro_var_run_t)
+
+type oro_port_t;
+corenet_port(oro_port_t)
+
+########################################
+#
+# oro local policy
+#
+allow oro_t self:process { fork };
+
+allow oro_t self:fifo_file rw_fifo_file_perms;
+allow oro_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(oro_t, oro_conf_t, oro_conf_t)
+manage_files_pattern(oro_t, oro_conf_t, oro_conf_t)
+
+manage_dirs_pattern(oro_t, oro_var_lib_t, oro_var_lib_t)
+manage_files_pattern(oro_t, oro_var_lib_t, oro_var_lib_t)
+files_var_lib_filetrans(oro_t, oro_var_lib_t, { dir file })
+
+manage_dirs_pattern(oro_t, oro_var_run_t, oro_var_run_t)
+manage_files_pattern(oro_t, oro_var_run_t, oro_var_run_t)
+
+sysnet_dns_name_resolve(oro_t)
+corenet_all_recvfrom_unlabeled(oro_t)
+
+allow oro_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(oro_t)
+corenet_tcp_sendrecv_generic_node(oro_t)
+corenet_tcp_sendrecv_all_ports(oro_t)
+corenet_tcp_bind_generic_node(oro_t)
+
+gen_require(`
+    type oro_port_t;
+')
+allow oro_t oro_port_t:tcp_socket name_bind;
+
+gen_require(`
+    type oro_port_t;
+')
+allow oro_t oro_port_t:tcp_socket name_connect;
+
+domain_use_interactive_fds(oro_t)
+
+files_read_etc_files(oro_t)
+
+miscfiles_read_localization(oro_t)
+
+sysnet_dns_name_resolve(oro_t)
+
+allow oro_t oro_exec_t:file execute_no_trans;
+allow oro_t self:process setsched;
+corecmd_exec_ls(oro_t)
+corenet_tcp_connect_http_port(oro_t)
+dev_read_urand(oro_t)
+fs_getattr_xattr_fs(oro_t)
+kernel_read_system_state(oro_t)

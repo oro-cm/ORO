@@ -40,15 +40,15 @@ if test x"$has_libcrypto" = x"yes" && test x"$has_openssl_ec" = x; then
   AC_MSG_CHECKING(for EC functions in libcrypto)
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
     #include <openssl/ec.h>
-    #include <openssl/ecdsa.h>
+    #include <openssl/orosa.h>
     #include <openssl/obj_mac.h>]],[[
     EC_KEY *eckey = EC_KEY_new_by_curve_name(NID_secp256k1);
-    ECDSA_sign(0, NULL, 0, NULL, NULL, eckey);
-    ECDSA_verify(0, NULL, 0, NULL, 0, eckey);
+    OROSA_sign(0, NULL, 0, NULL, NULL, eckey);
+    OROSA_verify(0, NULL, 0, NULL, 0, eckey);
     EC_KEY_free(eckey);
-    ECDSA_SIG *sig_openssl;
-    sig_openssl = ECDSA_SIG_new();
-    ECDSA_SIG_free(sig_openssl);
+    OROSA_SIG *sig_openssl;
+    sig_openssl = OROSA_SIG_new();
+    OROSA_SIG_free(sig_openssl);
   ]])],[has_openssl_ec=yes],[has_openssl_ec=no])
   AC_MSG_RESULT([$has_openssl_ec])
 fi

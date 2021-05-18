@@ -1,6 +1,5 @@
 // Copyright (c) 2009-2017 The Bitcoin developers
-// Copyright (c) 2017-2018 The PIVX developers
-// Copyright (c) 2018-2019 The ORO developers
+// Copyright (c) 2017-2018 The ORO developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -160,7 +159,7 @@ bool CKey::Check(const unsigned char* vch)
 void CKey::MakeNewKey(bool fCompressedIn)
 {
     do {
-        GetRandBytes(keydata.data(), keydata.size());
+        GetStrongRandBytes(keydata.data(), keydata.size());
     } while (!Check(keydata.data()));
     fValid = true;
     fCompressed = fCompressedIn;
@@ -218,10 +217,10 @@ bool CKey::Sign(const uint256& hash, std::vector<unsigned char>& vchSig, uint32_
     size_t nSigLen = CPubKey::SIGNATURE_SIZE;
     unsigned char extra_entropy[32] = {0};
     WriteLE32(extra_entropy, test_case);
-    secp256k1_ecdsa_signature sig;
-    int ret = secp256k1_ecdsa_sign(secp256k1_context_sign, &sig, hash.begin(), begin(), secp256k1_nonce_function_rfc6979, test_case ? extra_entropy : nullptr);
+    secp256k1_orosa_signature sig;
+    int ret = secp256k1_orosa_sign(secp256k1_context_sign, &sig, hash.begin(), begin(), secp256k1_nonce_function_rfc6979, test_case ? extra_entropy : nullptr);
     assert(ret);
-    secp256k1_ecdsa_signature_serialize_der(secp256k1_context_sign, (unsigned char*)vchSig.data(), &nSigLen, &sig);
+    secp256k1_orosa_signature_serialize_der(secp256k1_context_sign, (unsigned char*)vchSig.data(), &nSigLen, &sig);
     vchSig.resize(nSigLen);
     return true;
 }
@@ -247,10 +246,10 @@ bool CKey::SignCompact(const uint256& hash, std::vector<unsigned char>& vchSig) 
         return false;
     vchSig.resize(CPubKey::COMPACT_SIGNATURE_SIZE);
     int rec = -1;
-    secp256k1_ecdsa_recoverable_signature sig;
-    int ret = secp256k1_ecdsa_sign_recoverable(secp256k1_context_sign, &sig, hash.begin(), begin(), secp256k1_nonce_function_rfc6979, nullptr);
+    secp256k1_orosa_recoverable_signature sig;
+    int ret = secp256k1_orosa_sign_recoverable(secp256k1_context_sign, &sig, hash.begin(), begin(), secp256k1_nonce_function_rfc6979, nullptr);
     assert(ret);
-    secp256k1_ecdsa_recoverable_signature_serialize_compact(secp256k1_context_sign, (unsigned char*)&vchSig[1], &rec, &sig);
+    secp256k1_orosa_recoverable_signature_serialize_compact(secp256k1_context_sign, (unsigned char*)&vchSig[1], &rec, &sig);
     assert(ret);
     assert(rec != -1);
     vchSig[0] = 27 + rec + (fCompressed ? 4 : 0);

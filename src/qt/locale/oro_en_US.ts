@@ -1544,32 +1544,32 @@ Please check the address and try again.</translation>
         <translation>Please select a privacy level.</translation>
     </message>
     <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 ORO</source>
-        <translation>Use 2 separate masternodes to mix funds up to 10000 ORO</translation>
+        <source>Use 2 separate masternodes to mix funds up to 200,000 ORO</source>
+        <translation>Use 2 separate masternodes to mix funds up to 200,000 ORO</translation>
     </message>
     <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 ORO</source>
-        <translation>Use 8 separate masternodes to mix funds up to 10000 ORO</translation>
+        <source>Use 8 separate masternodes to mix funds up to 200,000 ORO</source>
+        <translation>Use 8 separate masternodes to mix funds up to 200,000 ORO</translation>
     </message>
     <message>
         <source>Use 16 separate masternodes</source>
         <translation>Use 16 separate masternodes</translation>
     </message>
     <message>
-        <source>This option is the quickest and will cost about ~0.025 ORO to anonymize 10000 ORO</source>
-        <translation>This option is the quickest and will cost about ~0.025 ORO to anonymize 10000 ORO</translation>
+        <source>This option is the quickest and will cost about ~0.025 ORO to anonymize 200,000 ORO</source>
+        <translation>This option is the quickest and will cost about ~0.025 ORO to anonymize 200,000 ORO</translation>
     </message>
     <message>
-        <source>This option is moderately fast and will cost about 0.05 ORO to anonymize 10000 ORO</source>
-        <translation>This option is moderately fast and will cost about 0.05 ORO to anonymize 10000 ORO</translation>
+        <source>This option is moderately fast and will cost about 0.05 ORO to anonymize 200,000 ORO</source>
+        <translation>This option is moderately fast and will cost about 0.05 ORO to anonymize 200,000 ORO</translation>
     </message>
     <message>
         <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
         <translation>This is the slowest and most secure option. Using maximum anonymity will cost</translation>
     </message>
     <message>
-        <source>0.1 ORO per 10000 ORO you anonymize.</source>
-        <translation>0.1 ORO per 10000 ORO you anonymize.</translation>
+        <source>0.1 ORO per 200,000 ORO you anonymize.</source>
+        <translation>0.1 ORO per 200,000 ORO you anonymize.</translation>
     </message>
     <message>
         <source>Obfuscation Configuration</source>
@@ -3292,10 +3292,6 @@ https://www.transifex.com/oro-project/oro-project-translations</translation>
         <translation>The Dash Core developers</translation>
     </message>
     <message>
-        <source>The PIVX Core developers</source>
-        <translation>The PIVX Core developers</translation>
-    </message>
-    <message>
         <source>The ORO Core developers</source>
         <translation>The ORO Core developers</translation>
     </message>
@@ -3418,8 +3414,8 @@ https://www.transifex.com/oro-project/oro-project-translations</translation>
         <translation>label</translation>
     </message>
     <message>
-        <source>Credit</source>
-        <translation>Credit</translation>
+        <source>Oro</source>
+        <translation>Oro</translation>
     </message>
     <message numerus="yes">
         <source>matures in %n more block(s)</source>
@@ -3438,8 +3434,8 @@ https://www.transifex.com/oro-project/oro-project-translations</translation>
         <translation>Total debit</translation>
     </message>
     <message>
-        <source>Total credit</source>
-        <translation>Total credit</translation>
+        <source>Total oro</source>
+        <translation>Total oro</translation>
     </message>
     <message>
         <source>Transaction fee</source>
@@ -4118,12 +4114,12 @@ for example: alertnotify=echo %%s | mail -s "ORO Alert" admin@foo.com
         <translation>Unable to locate enough Obfuscation denominated funds for this transaction.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 ORO.</source>
-        <translation>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 ORO.</translation>
+        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 200,000 ORO.</source>
+        <translation>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 200,000 ORO.</translation>
     </message>
     <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 ORO.</source>
-        <translation>Unable to locate enough funds for this transaction that are not equal 10000 ORO.</translation>
+        <source>Unable to locate enough funds for this transaction that are not equal 200,000 ORO.</source>
+        <translation>Unable to locate enough funds for this transaction that are not equal 200,000 ORO.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -4286,12 +4282,8 @@ for example: alertnotify=echo %%s | mail -s "ORO Alert" admin@foo.com
         <translation>Copyright (C) 2014-%i The Dash Core Developers</translation>
     </message>
     <message>
-        <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
-        <translation>Copyright (C) 2015-%i The PIVX Core Developers</translation>
-    </message>
-    <message>
-        <source>Copyright (C) 2018-%i The ORO Core Developers</source>
-        <translation>Copyright (C) 2018-%i The ORO Core Developers</translation>
+        <source>Copyright (C) 2015-%i The ORO Core Developers</source>
+        <translation>Copyright (C) 2015-%i The ORO Core Developers</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>

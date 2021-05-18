@@ -1,95 +1,48 @@
-ORO Core integration/staging tree
-===================================
+ORO Core integration/staging repository
+=====================================
 
-http://oro.cm
+[![Build Status](https://travis-ci.org/ORO/ORO.svg?branch=master)](https://travis-ci.org/ORO/ORO) [![GitHub version](https://badge.fury.io/gh/ORO%2FORO.svg)](https://badge.fury.io/gh/ORO-Project%2FORO)
 
-What is ORO?
---------------
+ORO is an open source crypto-currency focused on fast private transactions using the Zerocoin protocol, with low transaction fees & environmental footprint.  It utilizes the first ever anonymous proof of stake protocol, called zPoS, combined with regular PoS and masternodes for securing its network. zPoS incentivises using the privacy features available in ORO by granting a higher block reward for zPoS over regular PoS and masternodes. In practice ORO has between 4 to 10 times higher use of it's privacy features in comparison to other coins that combine public and private transactions. This is thanks to innovations like zPoS and integrating the Zerocoin protocol into light/mobile wallets, allowing for a complete and lightweight privacy protocol that can be used on the go. As well as security improvements like deterministic generation of zORO for easy backups.
+The goal of ORO is to achieve a decentralized sustainable crypto currency with near instant full-time private transactions, fair governance and community intelligence.
+- Anonymized transactions & consensus using the Zerocoin Protocol and zPoS.
+- light/mobile wallet privacy using the Zerocoin Light Node Protocol
+- Fast transactions featuring guaranteed zero confirmation transactions, we call it _SwiftX_.
+- Decentralized blockchain voting utilizing Masternode technology to form a DAO. The blockchain will distribute monthly treasury funds based on successful proposals submitted by the community and voted on by the DAO.
 
-ORO is an experimental new digital currency that enables instant payments to
-anyone, anywhere in the world. ORO uses peer-to-peer technology to operate
-with no central authority: managing transactions and issuing money are carried
-out collectively by the network. ORO Core is the name of open source
-software which enables the use of this currency.
+More information at [oro.cm](https://www.oro.cm)
 
-For more information, as well as an immediately useable, binary version of
-the ORO Core software, see http://oro.cm/.
+### Coin Specs
+<table>
+<tr><td>Algo</td><td>Quark</td></tr>
+<tr><td>Block Time</td><td>60 Seconds</td></tr>
+<tr><td>Difficulty Retargeting</td><td>Every Block</td></tr>
+<tr><td>Max Coin Supply (PoW Phase)</td><td>1,125,899,906,842,629 ORO</td></tr>
+<tr><td>Max Coin Supply (PoS Phase)</td><td>∞ ORO</td></tr>
+<tr><td>Premine</td><td>1,125,899,906,842,624 ORO</td></tr>
+</table>
 
-License
--------
+### Reward Distribution
 
-ORO Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
-information or see http://opensource.org/licenses/MIT.
+<table>
+<th colspan=4>Genesis Block</th>
+<tr><th>Block Height</th><th>Reward Amount</th><th>Notes</th></tr>
+<tr><td>1</td><td>1,125,899,906,842,624 ORO</td><td>Initial Pre-mine</td></tr>
+</table>
 
-Development process
--------------------
+### PoW Rewards Breakdown
 
-Developers work in their own trees, then submit pull requests when they think
-their feature or bug fix is ready.
+<table>
+<th>Block Height</th><th>Masternodes</th><th>Miner</th>
+<tr><td>2-5,000</td><td>0 ORO</td><td>0.001 ORO</td>/tr>
+</table>
 
-If it is a simple/trivial/non-controversial change, then one of the ORO
-development team members simply pulls it.
+### PoS Rewards Breakdown
 
+<table>
+<th>Phase</th><th>Block Height</th><th>Reward</th><th>Masternodes</th><th>Stakers</th>,
+<tr><td>Phase 0</td><td>5,001-8,388,000</td><td>0.001 ORO</td><td>0 ORO</td><td>0.001 ORO</td></tr>
+<tr><td>Phase 1</td><td>8,388,001-∞</td><td>Just Fee</td><td>0 ORO</td><td>Just Fee ORO</td></tr>
 
-The patch will be accepted if there is broad consensus that it is a good thing.
-Developers should expect to rework and resubmit patches if the code doesn't
-match the project's coding conventions (see [doc/coding.md](doc/coding.md)) or are
-controversial.
+</table>
 
-The `master` branch is regularly built and tested, but is not guaranteed to be
-completely stable. [Tags](https://github.com/oro-cm/ORO/tags) are created
-regularly to indicate new official, stable release versions of ORO.
-
-Testing
--------
-
-Testing and code review is the bottleneck for development; we get more pull
-requests than we can review and test on short notice. Please be patient and help out by testing
-other people's pull requests, and remember this is a security-critical project where any mistake might cost people
-lots of money.
-
-### Automated Testing
-
-Developers are strongly encouraged to write unit tests for new code, and to
-submit new unit tests for old code. Unit tests can be compiled and run (assuming they weren't disabled in configure) with: `make check`
-
-
-### Manual Quality Assurance (QA) Testing
-
-Large changes should have a test plan, and should be tested by somebody other
-than the developer who wrote the code.
-
-Development tips and tricks
----------------------------
-
-**compiling for debugging**
-
-Run configure with the --enable-debug option, then make. Or run configure with
-CXXFLAGS="-g -ggdb -O0" or whatever debug flags you need.
-
-**debug.log**
-
-If the code is behaving strangely, take a look in the debug.log file in the data directory;
-error and debugging messages are written there.
-
-The -debug=... command-line option controls debugging; running with just -debug will turn
-on all categories (and give you a very large debug.log file).
-
-The Qt code routes qDebug() output to debug.log under category "qt": run with -debug=qt
-to see it.
-
-**testnet and regtest modes**
-
-Run with the -testnet option to run with "play OROs" on the test network, if you
-are testing multi-machine code that needs to operate across the internet.
-
-If you are testing something that can run on one machine, run with the -regtest option.
-In regression test mode, blocks can be created on-demand; see qa/rpc-tests/ for tests
-that run in -regtest mode.
-
-**DEBUG_LOCKORDER**
-
-ORO Core is a multithreaded application, and deadlocks or other multithreading bugs
-can be very difficult to track down. Compiling with -DDEBUG_LOCKORDER (configure
-CXXFLAGS="-DDEBUG_LOCKORDER -g") inserts run-time checks to keep track of which locks
-are held, and adds warnings to the debug.log file if inconsistencies are detected.

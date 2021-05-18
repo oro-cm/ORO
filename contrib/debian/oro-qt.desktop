@@ -1,6 +1,6 @@
 [Desktop Entry]
-Encoding=UTF-8
-Name=ORO
+Version=1.0
+Name=ORO Core
 Comment=ORO P2P Cryptocurrency
 Comment[fr]=ORO, monnaie virtuelle cryptographique pair à pair
 Comment[tr]=ORO, eşten eşe kriptografik sanal para birimi
@@ -10,3 +10,4 @@ Type=Application
 Icon=oro128
 MimeType=x-scheme-handler/oro;
 Categories=Office;Finance;
+StartupWMClass=Oro-qt
